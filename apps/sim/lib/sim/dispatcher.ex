@@ -17,6 +17,10 @@ defmodule Sim.Dispatcher do
     GenServer.call(dispatcher, {:join})
   end
 
+  def message(dispatcher, message) do
+    GenServer.call(dispatcher, {:message, message})
+  end
+
   # --- server API ---
 
   def init(:ok) do
@@ -35,7 +39,9 @@ defmodule Sim.Dispatcher do
     {:reply, :ok, state}
   end
 
-  def handle_call({unknown}, _from, _state) do
-    raise "unknown call #{unknown}"
+  def handle_call({:message, {module, action, args}}, {pid, _ref}, state) do
+    result = module.process(action, args)
+    send(pid, result)
+    {:reply, :ok, state}
   end
 end
