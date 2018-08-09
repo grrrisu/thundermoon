@@ -15,7 +15,7 @@ config :thunder_phoenix, ThunderPhoenixWeb.Endpoint,
     node: [
       "node_modules/parcel-bundler/bin/cli.js",
       "watch",
-      "web/static/js/app.js",
+      "lib/thunder_phoenix_web/static/js/app.js",
       "--out-dir",
       "priv/static/js"
     ]
