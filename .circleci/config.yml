@@ -5,12 +5,14 @@ jobs:
     docker:
       - image: circleci/elixir:1.7
         environment:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
           MIX_ENV: test
-      # - image: circleci/postgres:10.1-alpine
-      #   environment:
-      #     POSTGRES_USER: postgres
-      #     POSTGRES_DB: app_test
-      #     POSTGRES_PASSWORD:
+      - image: circleci/postgres:9.5
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: thunder_phoenix_test
+          POSTGRES_PASSWORD:
 
     working_directory: ~/app
 
@@ -22,7 +24,7 @@ jobs:
 
       - restore_cache:
           keys:
-            #- v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
             - v1-mix-cache-{{ .Branch }}
             - v1-mix-cache
       - restore_cache:
@@ -30,9 +32,9 @@ jobs:
             - v1-build-cache-{{ .Branch }}
             - v1-build-cache
       - run: mix do deps.get, compile
-      # - save_cache:
-      #     key: v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
-      #     paths: "deps"
+      - save_cache:
+          key: v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+          paths: "deps"
       - save_cache:
           key: v1-mix-cache-{{ .Branch }}
           paths: "deps"
@@ -46,9 +48,9 @@ jobs:
           key: v1-build-cache
           paths: "_build"
 
-      # - run:
-      #     name: Wait for DB
-      #     command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
       - run: mix test
 
