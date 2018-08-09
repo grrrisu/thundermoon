@@ -1,0 +1,25 @@
+{
+  "name": "thunder_phoenix",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "deploy": "parcel build web/static/js/app.js --out-dir priv/static/js",
+    "watch": "parcel watch web/static/js/app.js --out-dir priv/static/js"
+  },
+  "author": "Alessandro Di Maria",
+  "license": "MIT",
+  "dependencies": {
+    "npm": "^6.3.0",
+    "phoenix": "file:../../deps/phoenix",
+    "phoenix_html": "file:../../deps/phoenix_html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.9.7"
+  },
+  "keywords": []
+}
