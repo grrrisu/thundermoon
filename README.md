@@ -1,11 +1,12 @@
 # thundermoon
+
 simulations using phoenix and elixir
 
 ![Thundermoon](/thunderbird_moon.jpg)
 
-Thunderbird Moon by Joe Wilson-Sxwaset
+_image: Thunderbird Moon by Joe Wilson-Sxwaset_
 
 ## Umbrella App
 
-* Phoenix talking to client via WebSockets
-* SimContainer doing the actual simulations
+- [ThunderPhoenix](apps/thunder_phoenix) webapp talking to clients via WebSockets
+- [SimContainer](apps/sim) doing the actual simulations
