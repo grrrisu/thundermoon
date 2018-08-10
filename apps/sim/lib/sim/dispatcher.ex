@@ -13,12 +13,12 @@ defmodule Sim.Dispatcher do
   @doc """
   join a realm to get notfied about its events
   """
-  def join(dispatcher) do
-    GenServer.call(dispatcher, {:join})
+  def join() do
+    GenServer.call(__MODULE__, {:join})
   end
 
-  def message(dispatcher, message) do
-    GenServer.call(dispatcher, {:message, message})
+  def message(message) do
+    GenServer.call(__MODULE__, {:message, message})
   end
 
   # --- server API ---
