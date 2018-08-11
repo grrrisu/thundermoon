@@ -14,3 +14,15 @@
   </div>
 </form>
 <div id="messages"></div>
+
+<h3>2. Sim Basic</h2>
+<p>
+  Some simple basic examples: the message is routed to the sim application, processed by the event queue and then sent back async.
+</p>
+<form>
+  <div class="form-group">
+    <label for="reverse-input">Text to reverse</label>
+    <input id="reverse-input" type="text" class="form-control" placeholder="text to reverse"></input>
+  </div>
+</form>
+<div id="reversed-text"></div>
