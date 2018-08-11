@@ -6,20 +6,20 @@ defmodule Sim.DispatcherTest do
     %{dispatcher: dispatcher}
   end
 
-  test "start dispatcher", %{dispatcher: dispatcher} do
-    assert Sim.Dispatcher.join(dispatcher) == :ok
+  test "start dispatcher", %{dispatcher: _dispatcher} do
+    assert Sim.Dispatcher.join() == :ok
   end
 
-  test "send reverse message", %{dispatcher: dispatcher} do
+  test "send reverse message", %{dispatcher: _dispatcher} do
     msg = {Example.Handler, :reverse, ["hello world"]}
-    assert Sim.Dispatcher.message(dispatcher, msg) == :ok
+    assert Sim.Dispatcher.message(msg) == :ok
   end
 
-  test "receive answer to reverse message", %{dispatcher: dispatcher} do
-    Sim.Dispatcher.join(dispatcher)
+  test "receive answer to reverse message", %{dispatcher: _dispatcher} do
+    Sim.Dispatcher.join()
 
     msg = {Example.Handler, :reverse, ["hello world"]}
-    Sim.Dispatcher.message(dispatcher, msg)
+    Sim.Dispatcher.message(msg)
 
     assert_receive {Example.Handler, :reverse, {:ok, "dlrow olleh"}}
   end
