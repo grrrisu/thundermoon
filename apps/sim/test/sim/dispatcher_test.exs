@@ -39,6 +39,7 @@ defmodule Sim.DispatcherTest do
     msg = {Example.Handler, :crash, []}
     Sim.Dispatcher.message(msg)
 
-    assert_receive {Example.Handler, :crash, {:error, "oh snap, function crashed!!!"}}
+    assert_receive {Example.Handler, :crash,
+                    {:error, %RuntimeError{message: "oh snap, function crashed!!!"}}}
   end
 end
