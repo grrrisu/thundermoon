@@ -15,4 +15,9 @@ defmodule ThunderPhoenixWeb.SimBasicChannelTest do
     push(socket, "reverse", %{text: "hello world"})
     assert_push("reverse", %{"answer" => "dlrow olleh"})
   end
+
+  test "crash event", %{socket: socket} do
+    push(socket, "crash", %{})
+    assert_push("crash", %{"error" => "oh snap, function crashed!!!"})
+  end
 end

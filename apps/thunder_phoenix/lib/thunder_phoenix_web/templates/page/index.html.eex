@@ -17,7 +17,12 @@
 
 <h3>2. Sim Basic</h2>
 <p>
-  Some basic example: the message is routed to the sim application, processed by the event queue and then sent back async.
+  Some basic examples
+</p>
+
+<h5>Reverse Text</h5>
+<p>
+  the text is wrapped into a message, is routed to the sim application, processed by the event queue and then sent back async.
 </p>
 <form>
   <div class="form-group">
@@ -26,3 +31,9 @@
   </div>
 </form>
 <div id="reversed-text"></div>
+
+<h5>Crash Event</h5>
+<p>
+  an event that crashes
+</p>
+<a href="#" id="crash-button" class="btn btn-danger">crash</a>

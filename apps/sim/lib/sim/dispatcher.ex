@@ -40,8 +40,18 @@ defmodule Sim.Dispatcher do
   end
 
   def handle_call({:message, {module, action, args}}, {pid, _ref}, state) do
-    result = module.process(action, args)
-    send(pid, result)
+    process_message(module, action, args, pid)
     {:reply, :ok, state}
+  end
+
+  def process_message(module, action, args, pid) do
+    Task.start(fn ->
+      try do
+        result = module.process(action, args)
+        send(pid, {module, action, {:ok, result}})
+      rescue
+        error -> send(pid, {module, action, {:error, Exception.message(error)}})
+      end
+    end)
   end
 end
