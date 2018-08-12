@@ -1,6 +1,9 @@
 defmodule Example.Handler do
   def process(:reverse, [text]) do
-    result = String.reverse(text)
-    {Example.Handler, :reverse, {:ok, result}}
+    String.reverse(text)
+  end
+
+  def process(:crash, []) do
+    raise "oh snap, function crashed!!!"
   end
 end

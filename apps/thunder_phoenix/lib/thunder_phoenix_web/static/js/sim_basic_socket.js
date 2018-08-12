@@ -2,6 +2,16 @@ import socket from "./user_socket";
 
 let channel = socket.channel("sim:basic", {});
 
+channel
+  .join()
+  .receive("ok", resp => {
+    console.log("Joined successfully", resp);
+  })
+  .receive("error", resp => {
+    console.log("Unable to join", resp);
+  });
+
+// reverse text
 let chatInput = document.querySelector("#reverse-input");
 let reversedText = document.getElementById("reversed-text");
 
@@ -23,11 +33,11 @@ channel.on("reverse", payload => {
   reversedText.innerText = payload.answer;
 });
 
-channel
-  .join()
-  .receive("ok", resp => {
-    console.log("Joined successfully", resp);
-  })
-  .receive("error", resp => {
-    console.log("Unable to join", resp);
-  });
+// crash event
+
+let crashButton = document.getElementById("crash-button");
+
+crashButton.addEventListener("click", event => {
+  event.preventDefault();
+  channel.push("crash", {});
+});
