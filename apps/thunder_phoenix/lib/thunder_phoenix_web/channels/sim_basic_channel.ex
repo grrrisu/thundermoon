@@ -7,16 +7,19 @@ defmodule ThunderPhoenixWeb.SimBasicChannel do
 
   def handle_in("reverse", %{"text" => text}, socket) do
     msg = {Example.Handler, :reverse, [text]}
+    Task.start_link(fn -> send_sim_message(msg, socket) end)
+    {:noreply, socket}
+  end
+
+  def send_sim_message(msg, socket) do
     Sim.Dispatcher.message(msg)
 
     receive do
       {Example.Handler, :reverse, {:ok, result}} ->
-        broadcast!(socket, "reverse", %{"answer" => result})
+        push(socket, "reverse", %{"answer" => result})
 
-      {Example.Handler, :reverse, {:error, message}} ->
-        broadcast!(socket, "reverse", %{"error" => message})
+      {_handler, :reverse, {:error, message}} ->
+        push(socket, "reverse", %{"error" => message})
     end
-
-    {:noreply, socket}
   end
 end

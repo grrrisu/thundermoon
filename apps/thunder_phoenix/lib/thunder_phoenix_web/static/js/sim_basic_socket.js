@@ -1,10 +1,7 @@
-import { Socket } from "phoenix";
-
-let socket = new Socket("/socket", { params: { token: window.userToken } });
-
-socket.connect();
+import socket from "./user_socket";
 
 let channel = socket.channel("sim:basic", {});
+
 let chatInput = document.querySelector("#reverse-input");
 let reversedText = document.getElementById("reversed-text");
 
@@ -34,5 +31,3 @@ channel
   .receive("error", resp => {
     console.log("Unable to join", resp);
   });
-
-export default socket;

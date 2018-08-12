@@ -17,7 +17,7 @@
 
 <h3>2. Sim Basic</h2>
 <p>
-  Some simple basic examples: the message is routed to the sim application, processed by the event queue and then sent back async.
+  Some basic example: the message is routed to the sim application, processed by the event queue and then sent back async.
 </p>
 <form>
   <div class="form-group">
