@@ -18,6 +18,6 @@ defmodule ThunderPhoenixWeb.SimBasicChannelTest do
 
   test "crash event", %{socket: socket} do
     push(socket, "crash", %{})
-    assert_push("crash", %{"error" => "oh snap, function crashed!!!"})
+    assert_push("crash", %{"error" => %RuntimeError{message: "oh snap, function crashed!!!"}})
   end
 end
