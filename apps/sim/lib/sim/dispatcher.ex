@@ -1,6 +1,8 @@
 defmodule Sim.Dispatcher do
   use GenServer
 
+  require Logger
+
   # --- client API ---
 
   @doc """
@@ -45,13 +47,27 @@ defmodule Sim.Dispatcher do
   end
 
   def process_message(module, action, args, pid) do
+    Logger.info("Sim.Dispatcher: incoming message #{module}.#{action}(#{args})")
+
     Task.start(fn ->
       Sim.EventQueue.add_and_process(self(), fn ->
         module.process(action, args)
       end)
 
       receive do
-        result -> send(pid, {module, action, result})
+        {:ok, result} ->
+          Logger.debug(
+            "Sim.Dispatcher: received answer #{module}.#{action}(#{args}) -> #{result}}"
+          )
+
+          send(pid, {module, action, {:ok, result}})
+
+        {:error, error} ->
+          Logger.warn(
+            "Sim.Dispatcher: received error #{module}.#{action}(#{args}) -> #{error.message}}"
+          )
+
+          send(pid, {module, action, {:error, error}})
       end
     end)
   end
