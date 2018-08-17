@@ -17,16 +17,14 @@ defmodule Sim.ObjectList do
     Agent.get(__MODULE__, &:queue.to_list(&1))
   end
 
-  def add(object) do
-    Agent.update(__MODULE__, &:queue.in(object, &1))
+  def objects() do
+    Agent.get(__MODULE__, fn queue ->
+      queue |> :queue.to_list() |> Enum.map(& &1.object)
+    end)
   end
 
-  def remove(object) do
-    Agent.update(__MODULE__, fn queue ->
-      :queue.to_list(queue)
-      |> List.delete(object)
-      |> :queue.from_list()
-    end)
+  def add(object, function) do
+    Agent.update(__MODULE__, &:queue.in(decorate(object, function), &1))
   end
 
   def next() do
@@ -39,5 +37,18 @@ defmodule Sim.ObjectList do
           {:empty, queue}
       end
     end)
+  end
+
+  def remove(object) do
+    Agent.update(__MODULE__, fn queue ->
+      queue
+      |> :queue.to_list()
+      |> Enum.reject(&(object == &1.object))
+      |> :queue.from_list()
+    end)
+  end
+
+  defp decorate(object, function) do
+    %Sim.Decorator{object: object, function: function}
   end
 end

@@ -18,7 +18,7 @@ defmodule Counter.Realm do
   end
 
   def build do
-    Sim.ObjectList.add(fn -> Counter.Tick.sim(self()) end)
+    Sim.ObjectList.add(Counter.Realm, fn -> Counter.Tick.sim(Couter.Realm) end)
 
     %{
       counter_1: build_counter(1),

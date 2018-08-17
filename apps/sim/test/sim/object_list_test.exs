@@ -2,40 +2,41 @@ defmodule Sim.ObjectListTest do
   use ExUnit.Case, async: true
 
   setup do
-    object_list = start_supervised!(Sim.ObjectList)
+    # object_list = start_supervised!(Sim.ObjectList)
     Sim.ObjectList.clear()
-    %{object_list: object_list}
+    %{function: fn -> :foo end}
   end
 
-  test "add some objects", %{object_list: _object_list} do
-    assert Sim.ObjectList.to_list() == []
-    Sim.ObjectList.add(:a)
-    Sim.ObjectList.add(:b)
-    Sim.ObjectList.add(:c)
-    assert Sim.ObjectList.to_list() == [:a, :b, :c]
+  test "add some objects", %{function: f} do
+    assert Sim.ObjectList.objects() == []
+    Sim.ObjectList.add(:a, f)
+    Sim.ObjectList.add(:b, f)
+    Sim.ObjectList.add(:c, f)
+    assert Sim.ObjectList.objects() == [:a, :b, :c]
   end
 
-  test "remove an object", %{object_list: _object_list} do
-    Sim.ObjectList.add(:a)
-    Sim.ObjectList.add(:b)
-    Sim.ObjectList.add(:c)
+  test "remove an object", %{function: f} do
+    Sim.ObjectList.add(:a, f)
+    Sim.ObjectList.add(:b, fn -> :one end)
+    Sim.ObjectList.add(:c, f)
+    Sim.ObjectList.add(:b, fn -> :two end)
     Sim.ObjectList.remove(:b)
-    assert Sim.ObjectList.to_list() == [:a, :c]
+    assert Sim.ObjectList.objects() == [:a, :c]
   end
 
   test "remove inexisting object" do
     Sim.ObjectList.remove(:b)
-    assert Sim.ObjectList.to_list() == []
+    assert Sim.ObjectList.objects() == []
   end
 
-  test "get next objects", %{object_list: _object_list} do
-    Sim.ObjectList.add(:a)
-    Sim.ObjectList.add(:b)
-    Sim.ObjectList.add(:c)
-    assert Sim.ObjectList.next() == :a
-    assert Sim.ObjectList.next() == :b
-    assert Sim.ObjectList.next() == :c
-    assert Sim.ObjectList.next() == :a
+  test "get next objects", %{function: f} do
+    Sim.ObjectList.add(:a, f)
+    Sim.ObjectList.add(:b, f)
+    Sim.ObjectList.add(:c, f)
+    assert Sim.ObjectList.next().object == :a
+    assert Sim.ObjectList.next().object == :b
+    assert Sim.ObjectList.next().object == :c
+    assert Sim.ObjectList.next().object == :a
   end
 
   test "get next object on a empty list" do

@@ -15,10 +15,4 @@ defmodule Counter.Tick do
         end
     end
   end
-
-  def enqueue() do
-    Sim.ObjectList.add(fn ->
-      Counter.Tick.sim(Counter.Realm)
-    end)
-  end
 end
