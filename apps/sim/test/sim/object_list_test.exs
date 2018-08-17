@@ -1,9 +1,8 @@
 defmodule Sim.ObjectListTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
-    # object_list = start_supervised!(Sim.ObjectList)
-    Sim.ObjectList.clear()
+    on_exit({}, fn -> Sim.ObjectList.clear() end)
     %{function: fn -> :foo end}
   end
 
@@ -13,6 +12,14 @@ defmodule Sim.ObjectListTest do
     Sim.ObjectList.add(:b, f)
     Sim.ObjectList.add(:c, f)
     assert Sim.ObjectList.objects() == [:a, :b, :c]
+  end
+
+  test "list size", %{function: f} do
+    assert Sim.ObjectList.size() == 0
+    Sim.ObjectList.add(:a, f)
+    Sim.ObjectList.add(:b, f)
+    Sim.ObjectList.add(:c, f)
+    assert Sim.ObjectList.size() == 3
   end
 
   test "remove an object", %{function: f} do

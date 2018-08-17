@@ -1,5 +1,5 @@
 defmodule Sim.SimulatorTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
     # simulator = start_supervised!({Sim.Simulator, name: Sim.Simulator})
@@ -9,12 +9,10 @@ defmodule Sim.SimulatorTest do
 
   test "simulator build" do
     Sim.Simulator.build(Counter.Realm, {})
-    Sim.Simulator.clear()
   end
 
   test "simulator start" do
     Sim.Simulator.start_sim({})
-    Sim.Simulator.clear()
   end
 
   test "simulator stop" do

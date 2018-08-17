@@ -18,7 +18,7 @@ defmodule Counter.Realm do
   end
 
   def build do
-    Sim.ObjectList.add(Counter.Realm, fn -> Counter.Tick.sim(Couter.Realm) end)
+    Sim.ObjectList.add(Counter.Realm, fn delay -> Counter.Tick.sim(Counter.Realm, delay) end)
 
     %{
       counter_1: build_counter(1),
@@ -27,7 +27,7 @@ defmodule Counter.Realm do
     }
   end
 
-  def build_counter(n) do
+  defp build_counter(n) do
     {:ok, pid} = Counter.Object.start_link(name: String.to_atom("counter_#{n}"))
     pid
   end

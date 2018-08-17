@@ -9,7 +9,7 @@ defmodule Sim.Simulator do
     GenServer.start_link(__MODULE__, :ok, opts)
   end
 
-  def start_sim(opts) do
+  def start_sim(opts \\ {}) do
     GenServer.call(__MODULE__, {:start_sim, opts})
   end
 
@@ -17,7 +17,7 @@ defmodule Sim.Simulator do
     GenServer.call(__MODULE__, {:stop_sim})
   end
 
-  def build(realm_module, opts) do
+  def build(realm_module, opts \\ {}) do
     GenServer.call(__MODULE__, {:build, {realm_module, opts}})
   end
 
@@ -78,6 +78,7 @@ defmodule Sim.Simulator do
   def handle_cast({:clear}, %{supervisor: supervisor, loop: loop, realm: realm} = state) do
     Supervisor.terminate_child(supervisor, loop)
     Supervisor.terminate_child(supervisor, realm)
+    Sim.ObjectList.clear()
     {:noreply, %{state | loop: nil, realm: nil}}
   end
 end

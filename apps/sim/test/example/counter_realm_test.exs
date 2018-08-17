@@ -3,7 +3,7 @@ defmodule Counter.RealmTest do
 
   setup do
     realm = start_supervised!({Counter.Realm, name: Counter.Realm})
-    # on_exit(%{realm: realm}, fn -> stop_supervised(realm) end)
+    on_exit(%{}, fn -> Sim.ObjectList.clear() end)
     %{realm: realm}
   end
 

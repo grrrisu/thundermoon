@@ -11,31 +11,47 @@ defmodule Sim.Loop do
 
   def run(_args) do
     IO.puts("starting sim loop...")
+    process(%{delay: @timeout, counter: 0})
   end
 
-  def process() do
-    case Sim.ObjectList.next() do
-      :empty ->
-        Process.sleep(@timeout)
+  def process(counter_params) do
+    {delay, new_counter} = item_timeout(counter_params)
+    process_next_item(delay)
+    Process.sleep(delay)
+    process({delay, new_counter})
+  end
 
-      sim_function ->
-        add_event(sim_function)
-        Process.sleep(5)
+  def item_timeout(%{delay: delay, counter: counter}) do
+    case counter do
+      0 -> %{delay: recalculate_timeout(), counter: Sim.ObjectList.size()}
+      n -> %{delay: delay, counter: counter - 1}
     end
-
-    process()
   end
 
-  def add_event(sim_function) do
+  defp recalculate_timeout() do
+    case Sim.ObjectList.size() do
+      0 -> @timeout
+      n -> (@timeout / n) |> round
+    end
+  end
+
+  def process_next_item(delay) do
+    case Sim.ObjectList.next() do
+      :empty -> :empty
+      item -> add_event(item, delay)
+    end
+  end
+
+  defp add_event(item, delay) do
     Task.start(fn ->
-      Sim.EventQueue.add_and_process(self(), sim_function)
+      Sim.EventQueue.add_and_process(self(), fn -> item.function.(delay) end)
 
       receive do
         {:ok, result} ->
-          Logger.debug("Sim.Worker: sim #{sim_function} -> #{result}")
+          Logger.debug("Sim.Worker: sim #{item.object}-> #{result}")
 
         {:error, error} ->
-          Logger.warn("Sim.Worker: error #{sim_function} -> #{error.message}}")
+          Logger.warn("Sim.Worker: error #{item.object} -> #{error.message}}")
       end
     end)
   end

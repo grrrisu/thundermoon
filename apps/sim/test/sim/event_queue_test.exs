@@ -3,7 +3,7 @@ defmodule Sim.EventQueueTest do
 
   setup do
     event_queue = start_supervised!(Sim.EventQueue)
-    Sim.EventQueue.clear()
+    on_exit({}, fn -> Sim.EventQueue.clear() end)
     %{event_queue: event_queue}
   end
 

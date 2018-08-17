@@ -9,6 +9,10 @@ defmodule Sim.ObjectList do
     Agent.update(__MODULE__, fn _state -> :queue.new() end)
   end
 
+  def size() do
+    Agent.get(__MODULE__, &:queue.len(&1))
+  end
+
   def is_empty() do
     Agent.get(__MODULE__, &:queue.is_empty(&1))
   end
