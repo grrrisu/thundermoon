@@ -24,14 +24,14 @@ defmodule Sim.Loop do
   def item_timeout(%{delay: delay, counter: counter}) do
     case counter do
       0 -> %{delay: recalculate_timeout(), counter: Sim.ObjectList.size()}
-      n -> %{delay: delay, counter: counter - 1}
+      _n -> %{delay: delay, counter: counter - 1}
     end
   end
 
   defp recalculate_timeout() do
     case Sim.ObjectList.size() do
       0 -> @timeout
-      n -> (@timeout / n) |> round
+      n -> div(@timeout, n)
     end
   end
 
