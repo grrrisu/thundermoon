@@ -9,7 +9,9 @@ defmodule Sim.Supervisor do
     children = [
       {Sim.Dispatcher, name: Sim.Dispatcher},
       {Sim.Broadcaster, name: Sim.Broadcaster},
+      {Sim.EventList, name: Sim.EventList},
       {Sim.EventQueue, name: Sim.EventQueue},
+      {DynamicSupervisor, name: Sim.FireWorkerSupervisor, strategy: :one_for_one},
       {Sim.Simulator, name: Sim.Simulator}
     ]
 

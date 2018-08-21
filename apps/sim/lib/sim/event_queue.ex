@@ -1,63 +1,67 @@
 defmodule Sim.EventQueue do
-  use Agent
+  use GenServer
 
+  # --- client API ---
+
+  @doc """
+  start the dispatcher to listen to incoming messages
+  """
   def start_link(opts) do
-    Agent.start_link(fn -> :queue.new() end, opts)
+    GenServer.start_link(__MODULE__, :ok, opts)
   end
 
-  def clear do
-    Agent.update(__MODULE__, fn _queue -> :queue.new() end)
+  def add(message) do
+    GenServer.call(__MODULE__, {:add, message})
   end
 
-  def is_empty do
-    Agent.get(__MODULE__, &:queue.is_empty(&1))
+  def clear() do
+    GenServer.cast(__MODULE__, {:clear})
   end
 
-  def add(caller, function) do
-    event = %Sim.Event{caller: caller, function: function}
-    Agent.update(__MODULE__, &:queue.in(event, &1))
+  # --- server API ---
+
+  def init(_args) do
+    {:ok, %{fire_worker: %{pid: nil, ref: nil}}}
   end
 
-  def add_and_process(caller, function) do
-    add(caller, function)
-    process()
+  def handle_call({:add, message}, _from, state) do
+    event = Sim.EventList.add(message)
+    {:reply, {:ok, event}, ensure_fire_worker_is_running(state)}
   end
 
-  def next() do
-    res = Agent.get_and_update(__MODULE__, &:queue.out(&1))
+  def handle_cast({:clear}, state) do
+    Sim.EventList.clear()
+    {:noreply, state}
+  end
 
-    case res do
-      {:value, event} -> {:ok, event}
-      :empty -> :empty
+  def ensure_fire_worker_is_running(state) do
+    case state do
+      %{fire_worker: %{pid: nil}} ->
+        {:ok, pid} =
+          DynamicSupervisor.start_child(
+            Sim.FireWorkerSupervisor,
+            {Sim.FireWorker, name: Sim.FireWorker}
+          )
+
+        ref = Process.monitor(pid)
+        %{state | fire_worker: %{pid: pid, ref: ref}}
+
+      %{fire_worker: %{pid: _pid}} ->
+        state
     end
   end
 
-  def fire_next_event() do
-    case next() do
-      {:ok, event} -> process_event(event)
-      :empty -> :empty
-    end
+  def handle_info({:DOWN, ref, :process, _pid, :normal}, state) do
+    new_state =
+      case state do
+        %{fire_worker: %{ref: ref}} -> %{state | fire_worker: %{pid: nil, ref: nil}}
+        _no_match -> state
+      end
+
+    {:noreply, new_state}
   end
 
-  def process do
-    case fire_next_event() do
-      {:ok, _result} -> process()
-      {:error, _error} -> process()
-      :empty -> :ok
-    end
-  end
-
-  defp process_event(event) do
-    send(
-      event.caller,
-      Task.async(fn -> execute_event_function(event) end)
-      |> Task.await()
-    )
-  end
-
-  defp execute_event_function(event) do
-    {:ok, event.function.()}
-  rescue
-    error -> {:error, error}
+  def handle_info(_msg, state) do
+    {:noreply, state}
   end
 end
