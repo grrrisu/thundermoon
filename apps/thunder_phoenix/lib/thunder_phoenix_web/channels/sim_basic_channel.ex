@@ -19,7 +19,7 @@ defmodule ThunderPhoenixWeb.SimBasicChannel do
   end
 
   defp send_sim_message(socket, msg) do
-    Sim.Dispatcher.message(msg)
+    Sim.process(msg)
 
     receive do
       {Example.Handler, :reverse, {:ok, result}} ->

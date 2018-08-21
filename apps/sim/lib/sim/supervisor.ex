@@ -8,6 +8,7 @@ defmodule Sim.Supervisor do
   def init(:ok) do
     children = [
       {Sim.Dispatcher, name: Sim.Dispatcher},
+      {Sim.Broadcaster, name: Sim.Broadcaster},
       {Sim.EventQueue, name: Sim.EventQueue},
       {Sim.Simulator, name: Sim.Simulator}
     ]
