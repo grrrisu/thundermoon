@@ -70,7 +70,7 @@ defmodule Sim.Simulator do
         :ok
 
       {:error, reason} ->
-        Logger.warn(reason)
+        Logger.warn(reason.message)
         :error
     end
   end

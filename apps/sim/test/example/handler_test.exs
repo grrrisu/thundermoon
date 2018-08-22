@@ -2,13 +2,13 @@ defmodule Example.HandlerTest do
   use ExUnit.Case, async: true
 
   test "reverse text" do
-    res = Example.Handler.process(:reverse, ["hello world"])
+    res = Example.Handler.incoming(:reverse, ["hello world"])
     assert res, "dlrow olleh"
   end
 
   test "crash" do
     assert_raise RuntimeError, fn ->
-      Example.Handler.process(:crash, [])
+      Example.Handler.incoming(:crash, [])
     end
   end
 end

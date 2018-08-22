@@ -1,5 +1,5 @@
 defmodule Sim.BroadcasterTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
     # _pid = start_supervised!({Sim.Broadcaster, name: Sim.Broadcaster})

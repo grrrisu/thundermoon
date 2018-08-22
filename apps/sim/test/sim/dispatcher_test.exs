@@ -1,5 +1,5 @@
 defmodule Sim.DispatcherTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
     # dispatcher = start_supervised!(Sim.Dispatcher)

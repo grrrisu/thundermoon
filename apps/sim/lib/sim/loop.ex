@@ -38,21 +38,16 @@ defmodule Sim.Loop do
   def process_next_item(delay) do
     case Sim.ObjectList.next() do
       :empty -> :empty
-      item -> add_event(item, delay)
+      item -> enqueue(item, delay)
     end
   end
 
-  defp add_event(item, delay) do
-    Task.start(fn ->
-      Sim.EventQueue.add_and_process(self(), fn -> item.function.(delay) end)
-
-      receive do
-        {:ok, result} ->
-          Logger.debug("Sim.Worker: sim #{item.object}-> #{result}")
-
-        {:error, error} ->
-          Logger.warn("Sim.Worker: error #{item.object} -> #{error.message}}")
-      end
-    end)
+  def enqueue(item, delay) do
+    Sim.EventQueue.add(
+      {item.handler, item.action,
+       fn ->
+         item.function.(delay)
+       end}
+    )
   end
 end

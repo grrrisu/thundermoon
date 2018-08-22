@@ -6,19 +6,23 @@ defmodule Sim.LoopTest do
     %{}
   end
 
+  def add_to_object_list(object, function) do
+    Sim.ObjectList.add({Example.Handler, :reverse, object, function})
+  end
+
   test "get timeout for first step" do
-    Sim.ObjectList.add(:a, fn -> :one end)
-    Sim.ObjectList.add(:b, fn -> :one end)
-    Sim.ObjectList.add(:c, fn -> :one end)
-    Sim.ObjectList.add(:d, fn -> :one end)
+    add_to_object_list(:a, fn -> :one end)
+    add_to_object_list(:b, fn -> :one end)
+    add_to_object_list(:c, fn -> :one end)
+    add_to_object_list(:d, fn -> :one end)
     %{delay: delay, counter: counter} = Sim.Loop.item_timeout(%{delay: 500, counter: 0})
     assert delay == 125
     assert counter == 4
   end
 
   test "get timeout for second step" do
-    Sim.ObjectList.add(:a, fn -> :one end)
-    Sim.ObjectList.add(:b, fn -> :one end)
+    add_to_object_list(:a, fn -> :one end)
+    add_to_object_list(:b, fn -> :one end)
     %{delay: delay, counter: counter} = Sim.Loop.item_timeout(%{delay: 125, counter: 4})
     # not recalculated
     assert delay == 125
@@ -26,8 +30,8 @@ defmodule Sim.LoopTest do
   end
 
   test "get timeout for the last step" do
-    Sim.ObjectList.add(:a, fn -> :one end)
-    Sim.ObjectList.add(:b, fn -> :one end)
+    add_to_object_list(:a, fn -> :one end)
+    add_to_object_list(:b, fn -> :one end)
     %{delay: delay, counter: counter} = Sim.Loop.item_timeout(%{delay: 125, counter: 0})
     # recalculated
     assert delay == 250
@@ -42,7 +46,7 @@ defmodule Sim.LoopTest do
 
   test "process item" do
     pid = self()
-    Sim.ObjectList.add(:b, fn delay -> send(pid, {:b, delay}) end)
+    add_to_object_list(:b, fn delay -> send(pid, {:b, delay}) end)
     {:ok, _pid} = Sim.Loop.process_next_item(200)
     assert_receive {:b, 200}
   end

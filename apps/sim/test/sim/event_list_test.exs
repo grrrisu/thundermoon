@@ -1,5 +1,5 @@
 defmodule Sim.EventListTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
     # pid = start_supervised!(Sim.EventList)

@@ -1,5 +1,5 @@
 defmodule Sim.EventQueueTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
     Sim.EventList.clear()

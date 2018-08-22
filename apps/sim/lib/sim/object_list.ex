@@ -27,8 +27,8 @@ defmodule Sim.ObjectList do
     end)
   end
 
-  def add(object, function) do
-    Agent.update(__MODULE__, &:queue.in(decorate(object, function), &1))
+  def add(object) do
+    Agent.update(__MODULE__, &:queue.in(decorate(object), &1))
   end
 
   def next() do
@@ -52,7 +52,7 @@ defmodule Sim.ObjectList do
     end)
   end
 
-  defp decorate(object, function) do
-    %Sim.Decorator{object: object, function: function}
+  defp decorate({handler, action, object, function}) do
+    %Sim.Decorator{handler: handler, action: action, object: object, function: function}
   end
 end

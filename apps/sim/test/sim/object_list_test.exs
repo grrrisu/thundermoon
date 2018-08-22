@@ -6,27 +6,31 @@ defmodule Sim.ObjectListTest do
     %{function: fn -> :foo end}
   end
 
+  def add_to_object_list(object, function) do
+    Sim.ObjectList.add({Example.Handler, :reverse, object, function})
+  end
+
   test "add some objects", %{function: f} do
     assert Sim.ObjectList.objects() == []
-    Sim.ObjectList.add(:a, f)
-    Sim.ObjectList.add(:b, f)
-    Sim.ObjectList.add(:c, f)
+    add_to_object_list(:a, f)
+    add_to_object_list(:b, f)
+    add_to_object_list(:c, f)
     assert Sim.ObjectList.objects() == [:a, :b, :c]
   end
 
   test "list size", %{function: f} do
     assert Sim.ObjectList.size() == 0
-    Sim.ObjectList.add(:a, f)
-    Sim.ObjectList.add(:b, f)
-    Sim.ObjectList.add(:c, f)
+    add_to_object_list(:a, f)
+    add_to_object_list(:b, f)
+    add_to_object_list(:c, f)
     assert Sim.ObjectList.size() == 3
   end
 
   test "remove an object", %{function: f} do
-    Sim.ObjectList.add(:a, f)
-    Sim.ObjectList.add(:b, fn -> :one end)
-    Sim.ObjectList.add(:c, f)
-    Sim.ObjectList.add(:b, fn -> :two end)
+    add_to_object_list(:a, f)
+    add_to_object_list(:b, fn -> :one end)
+    add_to_object_list(:c, f)
+    add_to_object_list(:b, fn -> :two end)
     Sim.ObjectList.remove(:b)
     assert Sim.ObjectList.objects() == [:a, :c]
   end
@@ -37,9 +41,9 @@ defmodule Sim.ObjectListTest do
   end
 
   test "get next objects", %{function: f} do
-    Sim.ObjectList.add(:a, f)
-    Sim.ObjectList.add(:b, f)
-    Sim.ObjectList.add(:c, f)
+    add_to_object_list(:a, f)
+    add_to_object_list(:b, f)
+    add_to_object_list(:c, f)
     assert Sim.ObjectList.next().object == :a
     assert Sim.ObjectList.next().object == :b
     assert Sim.ObjectList.next().object == :c

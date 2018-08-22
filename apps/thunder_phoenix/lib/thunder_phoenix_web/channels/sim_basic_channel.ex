@@ -2,6 +2,7 @@ defmodule ThunderPhoenixWeb.SimBasicChannel do
   use Phoenix.Channel
 
   def join("sim:basic", _message, socket) do
+    join_realm(Example.Handler)
     {:ok, socket}
   end
 
@@ -14,13 +15,18 @@ defmodule ThunderPhoenixWeb.SimBasicChannel do
   end
 
   defp handle_in_msg(socket, msg) do
-    Task.start_link(fn -> send_sim_message(socket, msg) end)
+    Task.start_link(fn -> Sim.process(msg) end)
     {:noreply, socket}
   end
 
-  defp send_sim_message(socket, msg) do
-    Sim.process(msg)
+  def join_realm(realm) do
+    Task.start_link(fn ->
+      Sim.join(realm)
+      listen()
+    end)
+  end
 
+  defp listen do
     receive do
       {Example.Handler, :reverse, {:ok, result}} ->
         push(socket, "reverse", %{"answer" => result})
@@ -28,5 +34,7 @@ defmodule ThunderPhoenixWeb.SimBasicChannel do
       {_handler, action, {:error, message}} ->
         push(socket, Atom.to_string(action), %{"error" => message})
     end
+
+    listen()
   end
 end
