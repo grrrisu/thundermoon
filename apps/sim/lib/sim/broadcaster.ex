@@ -1,6 +1,8 @@
 defmodule Sim.Broadcaster do
   use GenServer
 
+  require Logger
+
   # --- client API ---
 
   def start_link(opts) do
@@ -62,6 +64,7 @@ defmodule Sim.Broadcaster do
   end
 
   def handle_cast({:receive_result, handler, action, result}, state) do
+    Logger.debug("Sim.Broadcaster: receiving result #{elem(result, 0)} for #{handler} #{action}")
     broadcast(state, handler, action, result)
     {:noreply, state}
   end
@@ -129,8 +132,7 @@ defmodule Sim.Broadcaster do
         handler.outgoing(state, action, {:ok, res})
 
       {:error, error} ->
-        :error
-        # Sim.Monitor.track(error)
+        Sim.Monitor.track(error)
     end
   end
 

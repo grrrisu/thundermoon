@@ -18,7 +18,7 @@ defmodule Counter.Realm do
   end
 
   def build do
-    add_to_object_list
+    add_to_object_list()
 
     %{
       counter_1: build_counter(1),
