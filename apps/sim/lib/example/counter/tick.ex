@@ -1,5 +1,5 @@
 defmodule Counter.Tick do
-  def sim(realm, delay) do
+  def sim(realm, _delay) do
     case realm.counter_1 |> Counter.Object.inc() do
       n when n > 0 ->
         :ok

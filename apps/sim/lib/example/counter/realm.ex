@@ -18,13 +18,24 @@ defmodule Counter.Realm do
   end
 
   def build do
-    Sim.ObjectList.add(Counter.Realm, fn delay -> Counter.Tick.sim(Counter.Realm, delay) end)
+    add_to_object_list()
 
     %{
       counter_1: build_counter(1),
       counter_10: build_counter(10),
       counter_100: build_counter(100)
     }
+  end
+
+  defp add_to_object_list do
+    Sim.ObjectList.add({
+      Counter.Handler,
+      :change,
+      Counter.Realm,
+      fn delay ->
+        Counter.Tick.sim(Counter.Realm, delay)
+      end
+    })
   end
 
   defp build_counter(n) do

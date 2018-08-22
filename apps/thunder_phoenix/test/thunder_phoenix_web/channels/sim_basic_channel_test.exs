@@ -13,11 +13,16 @@ defmodule ThunderPhoenixWeb.SimBasicChannelTest do
 
   test "reverse text in sim handler", %{socket: socket} do
     push(socket, "reverse", %{text: "hello world"})
-    assert_push("reverse", %{"answer" => "dlrow olleh"})
+    assert_push("reverse", %{"answer" => "dlrow olleh"}, 500)
   end
 
   test "crash event", %{socket: socket} do
     push(socket, "crash", %{})
-    assert_push("crash", %{"error" => %RuntimeError{message: "oh snap, function crashed!!!"}})
+
+    refute_push(
+      "crash",
+      %{"error" => %RuntimeError{message: "oh snap, function crashed!!!"}},
+      500
+    )
   end
 end

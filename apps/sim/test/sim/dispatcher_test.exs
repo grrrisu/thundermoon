@@ -1,45 +1,19 @@
 defmodule Sim.DispatcherTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
-    dispatcher = start_supervised!(Sim.Dispatcher)
-    %{dispatcher: dispatcher}
+    # dispatcher = start_supervised!(Sim.Dispatcher)
+    :ok
   end
 
-  test "start dispatcher", %{dispatcher: _dispatcher} do
-    assert Sim.Dispatcher.join() == :ok
-  end
-
-  # reverse text
-
-  test "send reverse message", %{dispatcher: _dispatcher} do
+  test "client process message" do
     msg = {Example.Handler, :reverse, ["hello world"]}
-    assert Sim.Dispatcher.message(msg) == :ok
+    assert Sim.Dispatcher.process(msg) == :ok
   end
 
-  test "receive answer to reverse message", %{dispatcher: _dispatcher} do
-    Sim.Dispatcher.join()
-
-    msg = {Example.Handler, :reverse, ["hello world"]}
-    Sim.Dispatcher.message(msg)
-
-    assert_receive {Example.Handler, :reverse, {:ok, "dlrow olleh"}}
-  end
-
-  # crash
-
-  test "send crash message", %{dispatcher: _dispatcher} do
-    msg = {Example.Handler, :crash, []}
-    assert Sim.Dispatcher.message(msg) == :ok
-  end
-
-  test "receive error for crash message", %{dispatcher: _dispatcher} do
-    Sim.Dispatcher.join()
-
-    msg = {Example.Handler, :crash, []}
-    Sim.Dispatcher.message(msg)
-
-    assert_receive {Example.Handler, :crash,
-                    {:error, %RuntimeError{message: "oh snap, function crashed!!!"}}}
+  test "add event to sim queue" do
+    {:ok, event} = Sim.Dispatcher.enqueue(Example.Handler, :reverse, ["hello world"])
+    %Sim.Event{handler: Example.Handler, action: :reverse, function: function} = event
+    assert function.() == "dlrow olleh"
   end
 end

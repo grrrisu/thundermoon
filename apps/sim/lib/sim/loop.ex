@@ -24,35 +24,30 @@ defmodule Sim.Loop do
   def item_timeout(%{delay: delay, counter: counter}) do
     case counter do
       0 -> %{delay: recalculate_timeout(), counter: Sim.ObjectList.size()}
-      n -> %{delay: delay, counter: counter - 1}
+      _n -> %{delay: delay, counter: counter - 1}
     end
   end
 
   defp recalculate_timeout() do
     case Sim.ObjectList.size() do
       0 -> @timeout
-      n -> (@timeout / n) |> round
+      n -> div(@timeout, n)
     end
   end
 
   def process_next_item(delay) do
     case Sim.ObjectList.next() do
       :empty -> :empty
-      item -> add_event(item, delay)
+      item -> enqueue(item, delay)
     end
   end
 
-  defp add_event(item, delay) do
-    Task.start(fn ->
-      Sim.EventQueue.add_and_process(self(), fn -> item.function.(delay) end)
-
-      receive do
-        {:ok, result} ->
-          Logger.debug("Sim.Worker: sim #{item.object}-> #{result}")
-
-        {:error, error} ->
-          Logger.warn("Sim.Worker: error #{item.object} -> #{error.message}}")
-      end
-    end)
+  def enqueue(item, delay) do
+    Sim.EventQueue.add(
+      {item.handler, item.action,
+       fn ->
+         item.function.(delay)
+       end}
+    )
   end
 end
