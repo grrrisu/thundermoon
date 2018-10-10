@@ -1,4 +1,6 @@
 defmodule Example.Handler do
+  require Logger
+
   def incoming(:reverse, [text]) do
     String.reverse(text)
   end
@@ -13,7 +15,7 @@ defmodule Example.Handler do
   def outgoing(sessions, action, result) do
     case Sim.Broadcaster.get_listeners(sessions, __MODULE__) do
       {:error, :not_found} ->
-        IO.puts("ERROR: no session #{__MODULE__} found!")
+        Logger.warn("ERROR: no session #{__MODULE__} found!")
 
       {:ok, listeners} ->
         Sim.Broadcaster.send_message(listeners, {__MODULE__, action, result})

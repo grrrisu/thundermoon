@@ -8,7 +8,7 @@
     <meta name="author" content="">
 
     <title>Hello ThunderPhoenix!</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/app.css") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/assets/app.css") %>">
   </head>
 
   <body>
@@ -26,6 +26,6 @@
       </main>
 
     </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/app.js") %>"></script>
+    <script src="<%= static_path(@conn, "/assets/app.js") %>"></script>
   </body>
 </html>

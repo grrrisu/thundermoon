@@ -4,8 +4,7 @@ use Mix.Config
 # debugging and code reloading.
 #
 # The watchers configuration can be used to run external
-# watchers to your application. For example, we use it
-# with brunch.io to recompile .js and .css sources.
+# watchers to your application. Here we use parcel watch.
 config :thunder_phoenix, ThunderPhoenixWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
@@ -17,7 +16,7 @@ config :thunder_phoenix, ThunderPhoenixWeb.Endpoint,
       "watch",
       "lib/thunder_phoenix_web/static/js/app.js",
       "--out-dir",
-      "priv/static/js"
+      "priv/static/assets"
     ]
   ]
 
