@@ -16,7 +16,7 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 
 ## SideNotes
 
-- brunch was replaced by parcel
+- brunch was replaced with parcel
 
 ## Learn more
 

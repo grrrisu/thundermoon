@@ -8,8 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "deploy": "parcel build lib/thunder_phoenix_web/static/js/app.js --out-dir priv/static",
-    "watch": "parcel watch lib/thunder_phoenix_web/static/js/app.js --out-dir priv/static"
+    "deploy": "parcel build lib/thunder_phoenix_web/static/js/app.js --out-dir priv/static/assets",
+    "watch": "parcel watch lib/thunder_phoenix_web/static/js/app.js --out-dir priv/static/assets"
   },
   "author": "Alessandro Di Maria",
   "license": "MIT",
