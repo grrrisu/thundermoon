@@ -7,7 +7,10 @@ import Counter from "./components/counter";
 import SimButton from "./components/sim_button";
 import reducer from "./state/reducer";
 
-let store = createStore(reducer);
+let store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 ReactDOM.render(
   <Provider store={store}>
