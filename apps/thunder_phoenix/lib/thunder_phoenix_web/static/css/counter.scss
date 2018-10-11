@@ -1,0 +1,22 @@
+.counter-container {
+  display: grid;
+  justify-items: start;
+  align-items: center;
+  grid-template-columns: repeat(3, 100px) 1fr;
+}
+
+.digit-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
+.counter-button {
+  grid-area: button;
+}
+
+.digit {
+  font-size: 3em;
+}
