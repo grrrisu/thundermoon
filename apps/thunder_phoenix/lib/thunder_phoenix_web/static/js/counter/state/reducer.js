@@ -10,13 +10,11 @@ const initialState = {
 module.exports = (state = initialState, action) => {
   switch (action.type) {
     case "INC_COUNTER":
-      return {
-        ...state,
-        digits: {
-          ...state.digits,
-          digit_1: state.digits.digit_1 + 1
-        }
-      };
+      let newState = { ...state };
+      const key = `digit_${action.payload.digit}`;
+      const step = parseInt(action.payload.step);
+      newState.digits[key] = state.digits[key] + step;
+      return newState;
     case "update":
       throw "not yet implemented";
     default:

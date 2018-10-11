@@ -3,14 +3,12 @@ import React from "react";
 import IncButton from "./inc_button";
 import Digit from "./digit";
 
-console.log(Digit);
-
-module.exports = () => {
+module.exports = ({ digit }) => {
   return (
     <div className="digit-container">
-      <IncButton />
-      <Digit />
-      <IncButton />
+      <IncButton digit={digit} step="1" />
+      <Digit digit={digit} />
+      <IncButton digit={digit} step="-1" />
     </div>
   );
 };

@@ -1,16 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
+  const digitValue = state.digits[`digit_${ownProps.digit}`];
   return {
-    digit: state.digits.digit_1
+    digitValue: digitValue
   };
 };
 
-const digitComponent = ({ digit }) => {
+const digitComponent = ({ digitValue }) => {
   return (
     <div className="digit">
-      <div className="badge badge-dark">{digit}</div>
+      <div className="badge badge-dark">{digitValue}</div>
     </div>
   );
 };

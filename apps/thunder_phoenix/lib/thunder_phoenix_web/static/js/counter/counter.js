@@ -12,9 +12,9 @@ let store = createStore(reducer);
 ReactDOM.render(
   <Provider store={store}>
     <div className="counter-container">
-      <Counter />
-      <Counter />
-      <Counter />
+      <Counter digit="100" />
+      <Counter digit="10" />
+      <Counter digit="1" />
       <SimButton />
     </div>
   </Provider>,
