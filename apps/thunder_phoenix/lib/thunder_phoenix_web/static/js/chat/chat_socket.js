@@ -1,4 +1,4 @@
-import socket from "./user_socket";
+import socket from "../user_socket";
 
 let channel = socket.channel("room:lobby", {});
 let chatInput = document.querySelector("#chat-input");
