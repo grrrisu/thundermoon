@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { emit } from "../websocket";
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -10,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     clickHandler: event => {
-      dispatch({ type: "INC_COUNTER", payload: ownProps });
+      emit("inc", ownProps);
     }
   };
 };

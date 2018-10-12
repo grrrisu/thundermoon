@@ -6,6 +6,8 @@ defmodule ThunderPhoenixWeb.UserSocket do
 
   channel("sim:basic", ThunderPhoenixWeb.SimBasicChannel)
 
+  channel("sim:counter", ThunderPhoenixWeb.SimCounterChannel)
+
   ## Transports
   transport(:websocket, Phoenix.Transports.WebSocket)
   # transport :longpoll, Phoenix.Transports.LongPoll

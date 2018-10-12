@@ -6,11 +6,16 @@ import { Provider } from "react-redux";
 import Counter from "./components/counter";
 import SimButton from "./components/sim_button";
 import reducer from "./state/reducer";
+import { listen } from "./websocket";
 
 let store = createStore(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+
+listen("update", payload => {
+  store.dispatch({ type: "UPDATE", payload: payload });
+});
 
 ReactDOM.render(
   <Provider store={store}>
