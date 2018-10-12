@@ -15,6 +15,16 @@ module.exports = (state = initialState, action) => {
       const value = parseInt(action.payload.value);
       newState.digits[key] = value;
       return newState;
+    case "SIM_STARTED":
+      return {
+        ...state,
+        running: true
+      };
+    case "SIM_STOPPED":
+      return {
+        ...state,
+        running: false
+      };
     default:
       return state;
   }

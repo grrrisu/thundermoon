@@ -1,25 +1,33 @@
 import React from "react";
 import { connect } from "react-redux";
+import { emit } from "../websocket";
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
+  return {
+    label: state.running ? "Stop" : "Start"
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const messageKey = ownProps.running ? "stop" : "start";
   return {
     clickHandler: event => {
-      console.log("start sim");
+      emit(messageKey, {});
     }
   };
 };
 
-const buttonComponent = ({ clickHandler }) => {
+const buttonComponent = ({ label, clickHandler }) => {
   return (
     <div>
       <button className="btn btn-primary counter-button" onClick={clickHandler}>
-        Start
+        {label}
       </button>
     </div>
   );
 };
 
 module.exports = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(buttonComponent);

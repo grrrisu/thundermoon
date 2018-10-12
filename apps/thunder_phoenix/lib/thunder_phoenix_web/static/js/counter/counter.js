@@ -3,8 +3,7 @@ import React from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 
-import Counter from "./components/counter";
-import SimButton from "./components/sim_button";
+import App from "./components/app";
 import reducer from "./state/reducer";
 import { listen } from "./websocket";
 
@@ -17,14 +16,17 @@ listen("update", payload => {
   store.dispatch({ type: "UPDATE", payload: payload });
 });
 
+listen("started", payload => {
+  store.dispatch({ type: "SIM_STARTED", payload: payload });
+});
+
+listen("stopped", payload => {
+  store.dispatch({ type: "SIM_STOPPED", payload: payload });
+});
+
 ReactDOM.render(
   <Provider store={store}>
-    <div className="counter-container">
-      <Counter digit="100" />
-      <Counter digit="10" />
-      <Counter digit="1" />
-      <SimButton />
-    </div>
+    <App />
   </Provider>,
   document.getElementById("counter")
 );

@@ -14,6 +14,18 @@ defmodule ThunderPhoenixWeb.SimCounterChannel do
     {:noreply, socket}
   end
 
+  def handle_in("start", message, socket) do
+    # FIXME just a shortcut to test websocket and redux
+    broadcast!(socket, "started", %{})
+    {:noreply, socket}
+  end
+
+  def handle_in("stop", message, socket) do
+    # FIXME just a shortcut to test websocket and redux
+    broadcast!(socket, "stopped", %{})
+    {:noreply, socket}
+  end
+
   def handle_info(:after_join, socket) do
     join_realm(Counter.Handler, socket)
     {:noreply, socket}
