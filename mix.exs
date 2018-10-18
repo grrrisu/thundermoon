@@ -5,7 +5,18 @@ defmodule Thundermoon.MixProject do
     [
       apps_path: "apps",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "Thundermoon",
+      source_url: "https://github.com/grrrisu/thundermoon",
+      homepage_url: "https://github.com/grrrisu/thundermoon",
+      docs: [
+        # The main page in the docs
+        # main: "api-reference.html",
+        logo: "thunderbird_moon.jpg"
+        # extras: ["README.md"]
+      ]
     ]
   end
 
@@ -15,6 +26,8 @@ defmodule Thundermoon.MixProject do
   #
   # Run "mix help deps" for examples and options.
   defp deps do
-    []
+    [
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+    ]
   end
 end
