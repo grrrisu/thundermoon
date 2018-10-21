@@ -1,4 +1,4 @@
-defmodule Sim.Simulator do
+defmodule Sim.Simulation.Service do
   use GenServer
 
   require Logger
@@ -59,7 +59,7 @@ defmodule Sim.Simulator do
   end
 
   defp start_child(child_module) do
-    case Supervisor.start_child(Sim.SimulationSupervisor, {child_module, name: child_module}) do
+    case Supervisor.start_child(Sim.Simulation.Supervisor, {child_module, name: child_module}) do
       {:ok, _pid} ->
         :ok
 
@@ -70,8 +70,8 @@ defmodule Sim.Simulator do
   end
 
   def handle_cast({:clear}, %{realm_module: realm_module} = state) do
-    Supervisor.terminate_child(Sim.SimulationSupervisor, Sim.Loop)
-    Supervisor.terminate_child(Sim.SimulationSupervisor, realm_module)
+    Supervisor.terminate_child(Sim.Simulation.Supervisor, Sim.Loop)
+    Supervisor.terminate_child(Sim.Simulation.Supervisor, realm_module)
     Sim.Simulation.List.clear()
     {:noreply, %{state | running: false, realm_module: nil}}
   end

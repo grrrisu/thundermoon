@@ -1,4 +1,4 @@
-defmodule Sim.SimulationSupervisor do
+defmodule Sim.Simulation.Supervisor do
   use Supervisor
 
   def start_link(opts) do
@@ -9,7 +9,7 @@ defmodule Sim.SimulationSupervisor do
     IO.puts("starting SimulationSupervisor")
 
     children = [
-      {Sim.Simulator, name: Sim.Simulator},
+      {Sim.Simulation.Service, name: Sim.Simulation.Service},
       {Sim.Simulation.List, name: Sim.Simulation.List}
     ]
 

@@ -25,10 +25,10 @@ defmodule Sim do
   end
 
   def build(realm_module, opts \\ {}) do
-    Sim.Simulator.build(realm_module, opts)
+    Sim.Simulation.Service.build(realm_module, opts)
   end
 
   def start(opts \\ {}) do
-    Sim.Simulator.start_sim(opts)
+    Sim.Simulation.Service.start_sim(opts)
   end
 end
