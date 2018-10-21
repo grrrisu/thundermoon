@@ -15,10 +15,10 @@ defmodule Sim.Loop do
   end
 
   def process(counter_params) do
-    {delay, new_counter} = item_timeout(counter_params)
+    %{delay: delay, counter: new_counter} = item_timeout(counter_params)
     process_next_item(delay)
     Process.sleep(delay)
-    process({delay, new_counter})
+    process(%{delay: delay, counter: new_counter})
   end
 
   def item_timeout(%{delay: delay, counter: counter}) do

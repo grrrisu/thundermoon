@@ -8,11 +8,11 @@ defmodule Sim.SimulatorTest do
   end
 
   test "simulator build" do
-    Sim.Simulator.build(Counter.Realm, {})
+    Sim.Simulator.build(Counter.Realm)
   end
 
   test "simulator start" do
-    Sim.Simulator.start_sim({})
+    Sim.Simulator.start_sim()
   end
 
   test "simulator stop" do

@@ -9,7 +9,7 @@ defmodule Sim.Supervisor do
     children = [
       {Sim.MessageSupervisor, name: Sim.MessageSupervisor},
       {Sim.EventSupervisor, name: Sim.EventSupervisor},
-      {Sim.Simulator, name: Sim.Simulator}
+      {Sim.SimulationSupervisor, name: Sim.SimulationSupervisor}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

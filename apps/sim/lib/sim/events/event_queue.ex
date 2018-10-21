@@ -4,7 +4,7 @@ defmodule Sim.EventQueue do
   # --- client API ---
 
   @doc """
-  start the dispatcher to listen to incoming messages
+  start the event queue
   """
   def start_link(opts) do
     GenServer.start_link(__MODULE__, :ok, opts)
