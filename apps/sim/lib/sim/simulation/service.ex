@@ -40,7 +40,7 @@ defmodule Sim.Simulation.Service do
 
   def handle_call({:start_sim, _opts}, _from, state) do
     new_state =
-      case start_child(Sim.Loop) do
+      case start_child(Sim.Simulation.Loop) do
         :ok -> %{state | running: true}
         :error -> state
       end
@@ -70,7 +70,7 @@ defmodule Sim.Simulation.Service do
   end
 
   def handle_cast({:clear}, %{realm_module: realm_module} = state) do
-    Supervisor.terminate_child(Sim.Simulation.Supervisor, Sim.Loop)
+    Supervisor.terminate_child(Sim.Simulation.Supervisor, Sim.Simulation.Loop)
     Supervisor.terminate_child(Sim.Simulation.Supervisor, realm_module)
     Sim.Simulation.List.clear()
     {:noreply, %{state | running: false, realm_module: nil}}

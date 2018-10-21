@@ -1,4 +1,4 @@
-defmodule Sim.Loop do
+defmodule Sim.Simulation.Loop do
   use Task, restart: :transient
 
   require Logger
