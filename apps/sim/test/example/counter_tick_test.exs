@@ -3,7 +3,7 @@ defmodule Counter.TickTest do
 
   setup do
     realm = start_supervised!({Counter.Realm, name: Counter.Realm})
-    on_exit(%{}, fn -> Sim.ObjectList.clear() end)
+    on_exit(%{}, fn -> Sim.Simulation.List.clear() end)
     %{realm: realm}
   end
 

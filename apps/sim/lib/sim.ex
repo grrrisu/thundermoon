@@ -23,4 +23,12 @@ defmodule Sim do
   def process(msg) do
     Sim.Dispatcher.process(msg)
   end
+
+  def build(realm_module, opts \\ {}) do
+    Sim.Simulator.build(realm_module, opts)
+  end
+
+  def start(opts \\ {}) do
+    Sim.Simulator.start_sim(opts)
+  end
 end

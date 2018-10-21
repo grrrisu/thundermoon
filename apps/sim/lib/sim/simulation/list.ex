@@ -1,4 +1,4 @@
-defmodule Sim.ObjectList do
+defmodule Sim.Simulation.List do
   use Agent
 
   def start_link(opts) do
@@ -53,6 +53,11 @@ defmodule Sim.ObjectList do
   end
 
   defp decorate({handler, action, object, function}) do
-    %Sim.Decorator{handler: handler, action: action, object: object, function: function}
+    %Sim.Simulation.Transducer{
+      handler: handler,
+      action: action,
+      object: object,
+      function: function
+    }
   end
 end

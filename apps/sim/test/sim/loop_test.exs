@@ -2,12 +2,12 @@ defmodule Sim.LoopTest do
   use ExUnit.Case
 
   setup do
-    on_exit({}, fn -> Sim.ObjectList.clear() end)
+    on_exit({}, fn -> Sim.Simulation.List.clear() end)
     %{}
   end
 
   def add_to_object_list(object, function) do
-    Sim.ObjectList.add({Example.Handler, :reverse, object, function})
+    Sim.Simulation.List.add({Example.Handler, :reverse, object, function})
   end
 
   test "get timeout for first step" do

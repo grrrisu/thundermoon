@@ -28,7 +28,7 @@ defmodule Counter.Realm do
   end
 
   defp add_to_object_list do
-    Sim.ObjectList.add({
+    Sim.Simulation.List.add({
       Counter.Handler,
       :change,
       Counter.Realm,

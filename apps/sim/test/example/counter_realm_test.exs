@@ -3,7 +3,7 @@ defmodule Counter.RealmTest do
 
   setup do
     realm = start_supervised!({Counter.Realm, name: Counter.Realm})
-    on_exit(%{}, fn -> Sim.ObjectList.clear() end)
+    on_exit(%{}, fn -> Sim.Simulation.List.clear() end)
     %{realm: realm}
   end
 
@@ -14,6 +14,6 @@ defmodule Counter.RealmTest do
   end
 
   test "add tick to object list" do
-    assert !Sim.ObjectList.is_empty()
+    assert !Sim.Simulation.List.is_empty()
   end
 end

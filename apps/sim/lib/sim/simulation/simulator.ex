@@ -72,7 +72,7 @@ defmodule Sim.Simulator do
   def handle_cast({:clear}, %{realm_module: realm_module} = state) do
     Supervisor.terminate_child(Sim.SimulationSupervisor, Sim.Loop)
     Supervisor.terminate_child(Sim.SimulationSupervisor, realm_module)
-    Sim.ObjectList.clear()
+    Sim.Simulation.List.clear()
     {:noreply, %{state | running: false, realm_module: nil}}
   end
 end
