@@ -1,4 +1,4 @@
-defmodule Sim.EventQueue do
+defmodule Sim.Event.Queue do
   use GenServer
 
   # --- client API ---
@@ -25,12 +25,12 @@ defmodule Sim.EventQueue do
   end
 
   def handle_call({:add, message}, _from, state) do
-    event = Sim.EventList.add(message)
+    event = Sim.Event.List.add(message)
     {:reply, {:ok, event}, ensure_fire_worker_is_running(state)}
   end
 
   def handle_cast({:clear}, state) do
-    Sim.EventList.clear()
+    Sim.Event.List.clear()
     {:noreply, state}
   end
 

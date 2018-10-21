@@ -17,7 +17,7 @@ defmodule Sim.FireWorker do
   end
 
   def fire_next_event() do
-    case Sim.EventList.next() do
+    case Sim.Event.List.next() do
       {:ok, event} -> process_event(event)
       :empty -> :empty
     end

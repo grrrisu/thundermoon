@@ -43,7 +43,7 @@ defmodule Sim.Simulation.Loop do
   end
 
   def enqueue(item, delay) do
-    Sim.EventQueue.add(
+    Sim.Event.Queue.add(
       {item.handler, item.action,
        fn ->
          item.function.(delay)

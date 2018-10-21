@@ -1,4 +1,4 @@
-defmodule Sim.EventSupervisor do
+defmodule Sim.Event.Supervisor do
   use Supervisor
 
   def start_link(opts) do
@@ -7,8 +7,8 @@ defmodule Sim.EventSupervisor do
 
   def init(:ok) do
     children = [
-      {Sim.EventList, name: Sim.EventList},
-      {Sim.EventQueue, name: Sim.EventQueue},
+      {Sim.Event.List, name: Sim.Event.List},
+      {Sim.Event.Queue, name: Sim.Event.Queue},
       {DynamicSupervisor, name: Sim.FireWorkerSupervisor, strategy: :one_for_one}
     ]
 

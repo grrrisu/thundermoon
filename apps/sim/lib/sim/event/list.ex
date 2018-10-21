@@ -1,4 +1,4 @@
-defmodule Sim.EventList do
+defmodule Sim.Event.List do
   use Agent
 
   def start_link(opts) do

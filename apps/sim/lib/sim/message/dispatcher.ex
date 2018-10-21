@@ -29,7 +29,7 @@ defmodule Sim.Dispatcher do
   end
 
   def enqueue(handler, action, args) do
-    Sim.EventQueue.add(
+    Sim.Event.Queue.add(
       {handler, action,
        fn ->
          handler.incoming(action, args)
