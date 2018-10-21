@@ -27,8 +27,8 @@ defmodule Sim.Broadcaster do
     GenServer.call(__MODULE__, {:listeners, realm})
   end
 
-  def sessions() do
-    GenServer.call(__MODULE__, {:sessions})
+  def channels() do
+    GenServer.call(__MODULE__, {:channels})
   end
 
   def clear() do
@@ -46,12 +46,12 @@ defmodule Sim.Broadcaster do
   end
 
   def handle_call({:join, realm}, {pid, _ref}, state) do
-    new_state = join_session(state, realm, pid)
+    new_state = join_channel(state, realm, pid)
     {:reply, {:ok, realm}, new_state}
   end
 
   def handle_call({:leave, realm}, {pid, _ref}, state) do
-    new_state = leave_session(state, realm, pid)
+    new_state = leave_channel(state, realm, pid)
     {:reply, {:ok, realm}, new_state}
   end
 
@@ -59,7 +59,7 @@ defmodule Sim.Broadcaster do
     {:reply, get_listeners(state, realm), state}
   end
 
-  def handle_call({:sessions}, _from, state) do
+  def handle_call({:channels}, _from, state) do
     {:reply, {:ok, state}, state}
   end
 
@@ -70,54 +70,54 @@ defmodule Sim.Broadcaster do
   end
 
   def handle_cast({:clear}, state) do
-    {:noreply, delete_sessions(state)}
+    {:noreply, delete_channels(state)}
   end
 
   # --- server internal ---
 
-  def join_session(sessions, key, listener) do
-    {sessions, session} = find_or_create_session(sessions, key)
-    Sim.Session.join(session, listener)
-    sessions
+  def join_channel(channels, key, listener) do
+    {channels, channel} = find_or_create_channel(channels, key)
+    Sim.Channel.join(channel, listener)
+    channels
   end
 
-  def leave_session(sessions, key, listener) do
-    case find_session(sessions, key) do
-      {:ok, pid} -> Sim.Session.leave(pid, listener)
+  def leave_channel(channels, key, listener) do
+    case find_channel(channels, key) do
+      {:ok, pid} -> Sim.Channel.leave(pid, listener)
       {:error, :not_found} -> nil
     end
 
-    sessions
+    channels
   end
 
-  def get_listeners(sessions, key) do
-    case find_session(sessions, key) do
-      {:ok, pid} -> {:ok, Sim.Session.listeners(pid)}
+  def get_listeners(channels, key) do
+    case find_channel(channels, key) do
+      {:ok, pid} -> {:ok, Sim.Channel.listeners(pid)}
       {:error, :not_found} -> {:error, :not_found}
     end
   end
 
-  def find_session(sessions, key) do
-    case Map.fetch(sessions, key) do
-      {:ok, session} -> {:ok, session.pid}
+  def find_channel(channels, key) do
+    case Map.fetch(channels, key) do
+      {:ok, channel} -> {:ok, channel.pid}
       :error -> {:error, :not_found}
     end
   end
 
-  def find_or_create_session(sessions, key) do
-    case sessions[key] do
+  def find_or_create_channel(channels, key) do
+    case channels[key] do
       nil ->
-        {:ok, pid} = Sim.Session.start_link([])
+        {:ok, pid} = Sim.Channel.start_link([])
         ref = Process.monitor(pid)
-        {Map.put(sessions, key, %{ref: ref, pid: pid}), pid}
+        {Map.put(channels, key, %{ref: ref, pid: pid}), pid}
 
-      session ->
-        {sessions, session.pid}
+      channel ->
+        {channels, channel.pid}
     end
   end
 
-  def delete_sessions(sessions) do
-    sessions
+  def delete_channels(channels) do
+    channels
     |> Map.values()
     |> Enum.map(& &1.pid)
     |> Enum.filter(&Process.alive?(&1))
