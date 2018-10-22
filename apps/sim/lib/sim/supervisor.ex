@@ -7,7 +7,7 @@ defmodule Sim.Supervisor do
 
   def init(:ok) do
     children = [
-      {Sim.MessageSupervisor, name: Sim.MessageSupervisor},
+      {Sim.Message.Supervisor, name: Sim.Message.Supervisor},
       {Sim.Event.Supervisor, name: Sim.Event.Supervisor},
       {Sim.Simulation.Supervisor, name: Sim.Simulation.Supervisor}
     ]

@@ -1,4 +1,4 @@
-defmodule Sim.MessageSupervisor do
+defmodule Sim.Message.Supervisor do
   use Supervisor
 
   def start_link(opts) do
