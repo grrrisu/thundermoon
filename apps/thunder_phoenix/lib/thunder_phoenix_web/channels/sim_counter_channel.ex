@@ -4,13 +4,16 @@ defmodule ThunderPhoenixWeb.SimCounterChannel do
   require Logger
 
   def join("sim:counter", _message, socket) do
-    # send(self(), :after_join)
+    send(self(), :after_join)
     {:ok, socket}
   end
 
   def handle_in("inc", %{"digit" => digit, "step" => step}, socket) do
-    # FIXME just a shortcut to test websocket and redux
-    broadcast!(socket, "update", %{digit: digit, value: 5})
+    if Enum.member?(["1", "10", "100"], digit) do
+      msg = {Counter.Handler, :inc, [digit]}
+      Task.start_link(fn -> Sim.process(msg) end)
+    end
+
     {:noreply, socket}
   end
 
@@ -39,17 +42,17 @@ defmodule ThunderPhoenixWeb.SimCounterChannel do
   end
 
   defp listen(socket) do
-    # receive do
-    #   {Example.Handler, :reverse, {:ok, result}} ->
-    #     push(socket, "reverse", %{"answer" => result})
-    #
-    #   {_handler, action, {:error, message}} ->
-    #     push(socket, Atom.to_string(action), %{"error" => message})
-    #
-    #   other ->
-    #     IO.puts("**** reveived something else ****")
-    #     IO.inspect(other)
-    # end
+    receive do
+      {Counter.Handler, :change, {:ok, result}} ->
+        push(socket, "change", %{"answer" => result})
+
+      {_handler, action, {:error, message}} ->
+        push(socket, Atom.to_string(action), %{"error" => message})
+
+      other ->
+        IO.puts("**** reveived something else ****")
+        IO.inspect(other)
+    end
 
     listen(socket)
   end
