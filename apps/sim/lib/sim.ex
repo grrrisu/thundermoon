@@ -18,7 +18,18 @@ defmodule Sim do
   end
 
   @doc """
-  process a message, consiting of tuple {handler_module, action, args}
+  process a message, consisting of tuple {handler_module, action, args}
+
+  ## Parameters
+
+    - msg: tuple {handler <Module>, action <Atom> , args <Array>}
+
+  ## Examples
+
+    Sim.Dispatcher.process({Example.Handler, :reverse, ["hello world"]})
+
+    Sim.Dispatcher.process({Example.Handler, :crash, []})
+
   """
   def process(msg) do
     Sim.Dispatcher.process(msg)
