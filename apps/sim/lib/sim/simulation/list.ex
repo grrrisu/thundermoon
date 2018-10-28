@@ -27,8 +27,8 @@ defmodule Sim.Simulation.List do
     end)
   end
 
-  def add(object) do
-    Agent.update(__MODULE__, &:queue.in(decorate(object), &1))
+  def add(simulation) do
+    Agent.update(__MODULE__, &:queue.in(decorate(simulation), &1))
   end
 
   def next() do

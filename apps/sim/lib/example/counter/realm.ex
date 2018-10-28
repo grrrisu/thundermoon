@@ -29,35 +29,32 @@ defmodule Counter.Realm do
 
   def inc(counter_key) do
     Agent.get_and_update(__MODULE__, fn state ->
-      result =
-        case counter_key do
-          :counter_1 -> inc_counter_1(state)
-          :counter_10 -> inc_counter_10(state)
-          :counter_100 -> inc_counter_100(state)
-        end
-
+      result = inc_counter(state, counter_key)
       {result, state}
     end)
   end
 
-  defp inc_counter_1(state) do
-    case state.counter_1 |> Counter.Object.inc() do
-      n when n > 0 -> %{counter_1: n}
-      n when n == 0 -> Map.merge(%{counter_1: 0}, inc_counter_10(state))
+  defp inc_counter(state, counter_key) do
+    new_counter = state[counter_key] |> Counter.Object.inc()
+
+    case new_counter do
+      n when n > 0 ->
+        %{counter_key => n}
+
+      n when n == 0 and counter_key != :counter_100 ->
+        next_key = next_counter_key(counter_key)
+        Map.merge(%{counter_key => 0}, inc_counter(state, next_key))
+
+      n when n == 0 and counter_key == :counter_100 ->
+        raise "exceeded counter"
     end
   end
 
-  defp inc_counter_10(state) do
-    case state.counter_10 |> Counter.Object.inc() do
-      n when n > 0 -> %{counter_10: n}
-      n when n == 0 -> Map.merge(%{counter_10: 0}, inc_counter_100(state))
-    end
-  end
-
-  defp inc_counter_100(state) do
-    case state.counter_100 |> Counter.Object.inc() do
-      n when n > 0 -> %{counter_100: n}
-      n when n == 0 -> raise "exceeded counter"
+  defp next_counter_key(current_key) do
+    case current_key do
+      :counter_1 -> :counter_10
+      :counter_10 -> :counter_100
+      :counter_100 -> raise "no next counter key"
     end
   end
 
