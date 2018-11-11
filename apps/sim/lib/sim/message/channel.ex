@@ -1,5 +1,5 @@
 defmodule Sim.Channel do
-  use Agent
+  use Agent, restart: :temporary
 
   @doc """
   start a Channel with a list of listeners

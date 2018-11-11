@@ -2,6 +2,7 @@ defmodule Sim.BroadcasterTest do
   use ExUnit.Case
 
   setup do
+    start_supervised!({DynamicSupervisor, name: Sim.ChannelSupervisor, strategy: :one_for_one})
     # _pid = start_supervised!({Sim.Broadcaster, name: Sim.Broadcaster})
     Sim.Broadcaster.clear()
     :ok

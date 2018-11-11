@@ -107,9 +107,10 @@ defmodule Sim.Broadcaster do
   def find_or_create_channel(channels, key) do
     case channels[key] do
       nil ->
-        {:ok, pid} = Sim.Channel.start_link([])
+        {:ok, pid} = DynamicSupervisor.start_child(Sim.ChannelSupervisor, Sim.Channel)
         ref = Process.monitor(pid)
-        {Map.put(channels, key, %{ref: ref, pid: pid}), pid}
+        new_channels = Map.put(channels, key, %{ref: ref, pid: pid})
+        {new_channels, pid}
 
       channel ->
         {channels, channel.pid}

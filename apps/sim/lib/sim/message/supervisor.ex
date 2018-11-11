@@ -7,10 +7,10 @@ defmodule Sim.Message.Supervisor do
 
   def init(:ok) do
     children = [
+      {DynamicSupervisor, name: Sim.ChannelSupervisor, strategy: :one_for_one},
+      {Sim.Monitor, name: Sim.Monitor},
       {Sim.Dispatcher, name: Sim.Dispatcher},
-      {Sim.Broadcaster, name: Sim.Broadcaster},
-      {Sim.Monitor, name: Sim.Monitor}
-      # {DynamicSupervisor, name: Sim.ChannelSupervisor, strategy: :one_for_one},
+      {Sim.Broadcaster, name: Sim.Broadcaster}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
