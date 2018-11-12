@@ -2,8 +2,8 @@ defmodule Sim.Simulation.ListTest do
   use ExUnit.Case
 
   setup do
-    on_exit({}, fn -> Sim.Simulation.List.clear() end)
-    %{function: fn -> :foo end}
+    start_supervised!({Sim.Simulation.List, name: Sim.Simulation.List})
+    %{function: fn -> :do_something end}
   end
 
   def add_to_object_list(object, function) do

@@ -2,9 +2,9 @@ defmodule Counter.RealmTest do
   use ExUnit.Case
 
   setup do
-    realm = start_supervised!({Counter.Realm, name: Counter.Realm})
-    on_exit(%{}, fn -> Sim.Simulation.List.clear() end)
-    %{realm: realm}
+    start_supervised!({Sim.Simulation.Supervisor, name: Sim.Simulation.Supervisor})
+    :ok = Sim.build(Counter.Realm)
+    :ok
   end
 
   test "build counters" do

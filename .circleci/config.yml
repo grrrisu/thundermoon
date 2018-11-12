@@ -52,7 +52,13 @@ jobs:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
-      - run: mix test
+      - run:
+          name: test sim app
+          command: cd ./apps/sim && mix test
+
+      - run:
+          name: test phoenix app
+          command: cd ./apps/thunder_phoenix && mix test
 
       - store_test_results:
           path: _build/test/lib/thundermoon

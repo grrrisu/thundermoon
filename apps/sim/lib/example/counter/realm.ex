@@ -56,11 +56,11 @@ defmodule Counter.Realm do
     })
   end
 
-  defp build_counter(n) do
+  defp build_counter(name) do
     {:ok, pid} =
       DynamicSupervisor.start_child(
         Sim.RealmSupervisor,
-        {Counter.Object, name: String.to_atom("counter_#{n}")}
+        {Counter.Object, name: name}
       )
   end
 end

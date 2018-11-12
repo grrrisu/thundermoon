@@ -34,7 +34,7 @@ defmodule Sim.Simulation.Service do
   # --- server API ---
 
   def init(:ok) do
-    IO.puts("starting Simulator")
+    # IO.puts("starting Sim.Simulation.Service")
     {:ok, %{running: false, realm_module: nil}}
   end
 

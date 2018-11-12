@@ -2,9 +2,8 @@ defmodule Sim.Event.ListTest do
   use ExUnit.Case
 
   setup do
-    # pid = start_supervised!(Sim.Event.List)
-    Sim.Event.List.clear()
-    %{}
+    start_supervised!({Sim.Event.List, name: Sim.Event.List})
+    :ok
   end
 
   test "add an event" do
