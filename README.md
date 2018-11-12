@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/grrrisu/thundermoon.svg?style=svg)](https://circleci.com/gh/grrrisu/thundermoon)
+
 # thundermoon
 
 simulations using phoenix and elixir
