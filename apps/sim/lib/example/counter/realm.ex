@@ -1,11 +1,14 @@
 defmodule Counter.Realm do
   use Agent
 
+  require Logger
+
   def start_link(opts) do
     Agent.start_link(fn -> Counter.Realm.build() end, opts)
   end
 
   def build do
+    Logger.debug("Counter.Realm building counters...")
     add_to_object_list()
 
     keys = [:counter_1, :counter_10, :counter_100]
@@ -57,7 +60,7 @@ defmodule Counter.Realm do
   end
 
   defp build_counter(name) do
-    {:ok, pid} =
+    {:ok, _pid} =
       DynamicSupervisor.start_child(
         Sim.RealmSupervisor,
         {Counter.Object, name: name}

@@ -12,8 +12,8 @@ let store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-listen("update", payload => {
-  store.dispatch({ type: "UPDATE", payload: payload });
+listen("change", payload => {
+  store.dispatch({ type: "CHANGE", payload: payload });
 });
 
 listen("started", payload => {
