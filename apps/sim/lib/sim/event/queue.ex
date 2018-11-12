@@ -21,6 +21,7 @@ defmodule Sim.Event.Queue do
   # --- server API ---
 
   def init(_args) do
+    # IO.puts("starting Sim.Event.Queue")
     {:ok, %{fire_worker: %{pid: nil, ref: nil}}}
   end
 

@@ -2,13 +2,14 @@ defmodule Sim.FireWorkerTest do
   use ExUnit.Case
 
   setup do
-    # pid = start_supervised!(Sim.Event.List)
-    Sim.Event.List.clear()
-    %{}
+    start_supervised!({Sim.Event.List, name: Sim.Event.List})
+    :ok
   end
 
   test "fire event successfully" do
-    event = Sim.Event.List.to_event({Example.Handler, :reverse, fn -> String.reverse("hello") end})
+    event =
+      Sim.Event.List.to_event({Example.Handler, :reverse, fn -> String.reverse("hello") end})
+
     assert Sim.FireWorker.fire_event(event) == {:ok, "olleh"}
   end
 

@@ -3,8 +3,7 @@ defmodule Sim.BroadcasterTest do
 
   setup do
     start_supervised!({DynamicSupervisor, name: Sim.ChannelSupervisor, strategy: :one_for_one})
-    # _pid = start_supervised!({Sim.Broadcaster, name: Sim.Broadcaster})
-    Sim.Broadcaster.clear()
+    start_supervised!({Sim.Broadcaster, name: Sim.Broadcaster})
     :ok
   end
 

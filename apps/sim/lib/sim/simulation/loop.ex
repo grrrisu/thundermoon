@@ -10,7 +10,7 @@ defmodule Sim.Simulation.Loop do
   end
 
   def run(_args) do
-    IO.puts("starting sim loop...")
+    # IO.puts("starting sim loop...")
     process(%{delay: @timeout, counter: 0})
   end
 

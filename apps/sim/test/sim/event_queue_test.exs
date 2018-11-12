@@ -2,8 +2,10 @@ defmodule Sim.Event.QueueTest do
   use ExUnit.Case
 
   setup do
-    Sim.Event.List.clear()
-    %{}
+    start_supervised!({DynamicSupervisor, name: Sim.FireWorkerSupervisor, strategy: :one_for_one})
+    start_supervised!({Sim.Event.List, name: Sim.Event.List})
+    start_supervised!({Sim.Event.Queue, name: Sim.Event.Queue})
+    :ok
   end
 
   test "add an event" do

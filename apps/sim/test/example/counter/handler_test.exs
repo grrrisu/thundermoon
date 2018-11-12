@@ -1,9 +1,10 @@
 defmodule Counter.HandlerTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   setup do
-    pid = start_supervised!({Counter.Realm, name: Counter.Realm})
-    %{realm: pid}
+    start_supervised!({Sim.Simulation.Supervisor, name: Sim.Simulation.Supervisor})
+    :ok = Sim.build(Counter.Realm)
+    :ok
   end
 
   test "inc" do

@@ -2,9 +2,8 @@ defmodule Sim.Simulation.ServiceTest do
   use ExUnit.Case
 
   setup do
-    # simulator = start_supervised!({Sim.Simulation.Service, name: Sim.Simulation.Service})
-    on_exit(%{}, fn -> Sim.Simulation.Service.clear() end)
-    %{}
+    start_supervised!({Sim.Simulation.Supervisor, name: Sim.Simulation.Supervisor})
+    :ok
   end
 
   test "simulator build" do

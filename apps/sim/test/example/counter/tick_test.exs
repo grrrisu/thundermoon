@@ -2,22 +2,22 @@ defmodule Counter.TickTest do
   use ExUnit.Case
 
   setup do
-    realm = start_supervised!({Counter.Realm, name: Counter.Realm})
-    on_exit(%{}, fn -> Sim.Simulation.List.clear() end)
-    %{realm: realm}
+    start_supervised!({Sim.Simulation.Supervisor, name: Sim.Simulation.Supervisor})
+    :ok = Sim.build(Counter.Realm)
+    :ok
   end
 
   test "inc 1" do
     Counter.Tick.sim(Counter.Realm, 10)
-    assert Counter.Realm.counter_1() |> Counter.Object.get() == 1
-    assert Counter.Realm.counter_10() |> Counter.Object.get() == 0
-    assert Counter.Realm.counter_100() |> Counter.Object.get() == 0
+    assert Counter.Object.get(:counter_1) == 1
+    assert Counter.Object.get(:counter_10) == 0
+    assert Counter.Object.get(:counter_100) == 0
   end
 
   test "inc 123" do
     Enum.each(1..123, fn _n -> Counter.Tick.sim(Counter.Realm, 10) end)
-    assert Counter.Realm.counter_1() |> Counter.Object.get() == 3
-    assert Counter.Realm.counter_10() |> Counter.Object.get() == 2
-    assert Counter.Realm.counter_100() |> Counter.Object.get() == 1
+    assert Counter.Object.get(:counter_1) == 3
+    assert Counter.Object.get(:counter_10) == 2
+    assert Counter.Object.get(:counter_100) == 1
   end
 end
