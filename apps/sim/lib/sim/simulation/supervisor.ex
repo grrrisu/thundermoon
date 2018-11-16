@@ -9,7 +9,6 @@ defmodule Sim.Simulation.Supervisor do
     # IO.puts("starting SimulationSupervisor")
 
     children = [
-      {DynamicSupervisor, name: Sim.RealmSupervisor, strategy: :one_for_one},
       {Sim.Simulation.Service, name: Sim.Simulation.Service},
       {Sim.Simulation.List, name: Sim.Simulation.List}
     ]

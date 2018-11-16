@@ -41,8 +41,8 @@ defmodule Sim.Simulation.Service do
   def handle_call({:start_sim, _opts}, _from, state) do
     new_state =
       case start_child(Sim.Simulation.Loop) do
-        :ok -> %{state | running: true}
-        :error -> state
+        {:ok, _pid} -> %{state | running: true}
+        {:error, _reason} -> state
       end
 
     {:reply, :ok, new_state}
@@ -51,22 +51,15 @@ defmodule Sim.Simulation.Service do
   def handle_call({:build, {realm_module, _opts}}, _from, state) do
     new_state =
       case start_child(realm_module) do
-        :ok -> %{state | realm_module: realm_module}
-        :error -> state
+        {:ok, _pid} -> %{state | realm_module: realm_module}
+        {:error, _reason} -> state
       end
 
     {:reply, :ok, new_state}
   end
 
   defp start_child(child_module) do
-    case Supervisor.start_child(Sim.Simulation.Supervisor, {child_module, name: child_module}) do
-      {:ok, _pid} ->
-        :ok
-
-      {:error, reason} ->
-        Logger.warn(reason.message)
-        :error
-    end
+    Supervisor.start_child(Sim.Simulation.Supervisor, {child_module, name: child_module})
   end
 
   def handle_cast({:clear}, %{realm_module: realm_module} = state) do

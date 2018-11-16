@@ -36,7 +36,7 @@ defmodule Counter.Realm do
         Map.merge(%{counter_key => 0}, inc_counter(state, next_key))
 
       n when n == 0 and counter_key == :counter_100 ->
-        raise "exceeded counter"
+        raise "counter overrun"
     end
   end
 
@@ -62,7 +62,7 @@ defmodule Counter.Realm do
   defp build_counter(name) do
     {:ok, _pid} =
       DynamicSupervisor.start_child(
-        Sim.RealmSupervisor,
+        Counter.DigitSupervisor,
         {Counter.Object, name: name}
       )
   end

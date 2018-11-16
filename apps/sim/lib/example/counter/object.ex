@@ -2,7 +2,12 @@ defmodule Counter.Object do
   use Agent
 
   def start_link(opts) do
-    Agent.start_link(fn -> 0 end, opts)
+    Agent.start_link(fn -> init_digit(opts[:name]) end, opts)
+  end
+
+  def init_digit(name) do
+    Sim.Broadcaster.receive_result(Counter.Handler, :inc, {:ok, %{name => 0}})
+    0
   end
 
   def get(object) do

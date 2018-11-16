@@ -1,6 +1,8 @@
 defmodule Sim.Event.Queue do
   use GenServer
 
+  require Logger
+
   # --- client API ---
 
   @doc """
@@ -21,7 +23,7 @@ defmodule Sim.Event.Queue do
   # --- server API ---
 
   def init(_args) do
-    # IO.puts("starting Sim.Event.Queue")
+    Logger.debug("starting Sim.Event.Queue...")
     {:ok, %{fire_worker: %{pid: nil, ref: nil}}}
   end
 
@@ -53,16 +55,24 @@ defmodule Sim.Event.Queue do
   end
 
   def handle_info({:DOWN, ref, :process, _pid, :normal}, state) do
-    new_state =
-      case state do
-        %{fire_worker: %{ref: ref}} -> %{state | fire_worker: %{pid: nil, ref: nil}}
-        _no_match -> state
-      end
+    {:noreply, remove_fire_worker(ref, state)}
+  end
 
-    {:noreply, new_state}
+  def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
+    # TODO broadcast {:error, reason}
+    {:noreply, remove_fire_worker(ref, state)}
   end
 
   def handle_info(_msg, state) do
     {:noreply, state}
+  end
+
+  defp remove_fire_worker(ref, state) do
+    current_ref = state.fire_worker.ref
+
+    case ref do
+      ref when ref == current_ref -> %{state | fire_worker: %{pid: nil, ref: nil}}
+      _ref -> state
+    end
   end
 end

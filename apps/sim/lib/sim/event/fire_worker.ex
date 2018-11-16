@@ -1,11 +1,14 @@
 defmodule Sim.FireWorker do
   use Task, restart: :transient
 
+  require Logger
+
   def start_link(args \\ []) do
     Task.start_link(__MODULE__, :run, args)
   end
 
   def run(_args) do
+    Logger.debug("starting fire_worker...")
     process()
   end
 

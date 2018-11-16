@@ -3,7 +3,7 @@ defmodule Counter.TickTest do
 
   setup do
     start_supervised!({Sim.Simulation.Supervisor, name: Sim.Simulation.Supervisor})
-    :ok = Sim.build(Counter.Realm)
+    :ok = Counter.build()
     :ok
   end
 

@@ -30,20 +30,20 @@ defmodule ThunderPhoenixWeb.SimCounterChannel do
   end
 
   def handle_info(:after_join, socket) do
-    join_realm(Counter.Handler, socket)
+    join_realm(socket)
     build_counter()
     {:noreply, socket}
   end
 
-  def join_realm(realm, socket) do
+  def join_realm(socket) do
     Task.start_link(fn ->
-      Sim.join(realm)
+      Counter.join()
       listen(socket)
     end)
   end
 
   defp build_counter() do
-    Task.start_link(fn -> Sim.build(Counter.Realm) end)
+    Task.start_link(fn -> Counter.build() end)
   end
 
   defp listen(socket) do
