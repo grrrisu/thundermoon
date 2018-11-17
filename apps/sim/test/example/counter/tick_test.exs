@@ -9,15 +9,15 @@ defmodule Counter.TickTest do
 
   test "inc 1" do
     Counter.Tick.sim(Counter.Realm, 10)
-    assert Counter.Object.get(:counter_1) == 1
-    assert Counter.Object.get(:counter_10) == 0
-    assert Counter.Object.get(:counter_100) == 0
+    assert Counter.Digit.get(:digit_1) == 1
+    assert Counter.Digit.get(:digit_10) == 0
+    assert Counter.Digit.get(:digit_100) == 0
   end
 
   test "inc 123" do
     Enum.each(1..123, fn _n -> Counter.Tick.sim(Counter.Realm, 10) end)
-    assert Counter.Object.get(:counter_1) == 3
-    assert Counter.Object.get(:counter_10) == 2
-    assert Counter.Object.get(:counter_100) == 1
+    assert Counter.Digit.get(:digit_1) == 3
+    assert Counter.Digit.get(:digit_10) == 2
+    assert Counter.Digit.get(:digit_100) == 1
   end
 end

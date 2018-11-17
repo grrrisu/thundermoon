@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state, ownProps) => {
-  const digitValue = state.digits[`counter_${ownProps.digit}`];
+  const digitValue = state.digits[`digit_${ownProps.digit}`];
   return {
     digitValue: digitValue
   };

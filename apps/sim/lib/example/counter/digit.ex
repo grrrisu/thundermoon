@@ -1,4 +1,4 @@
-defmodule Counter.Object do
+defmodule Counter.Digit do
   use Agent
 
   def start_link(opts) do
@@ -10,12 +10,12 @@ defmodule Counter.Object do
     0
   end
 
-  def get(object) do
-    Agent.get(object, fn counter -> counter end)
+  def get(digit) do
+    Agent.get(digit, fn counter -> counter end)
   end
 
-  def inc(object) do
-    Agent.get_and_update(object, fn
+  def inc(digit) do
+    Agent.get_and_update(digit, fn
       counter when counter == 9 ->
         {0, 0}
 

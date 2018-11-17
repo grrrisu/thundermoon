@@ -1,7 +1,7 @@
 defmodule Counter.Handler do
   def incoming(:inc, [digit]) do
-    counter_key = String.to_atom("counter_#{digit}")
-    Counter.Realm.inc(counter_key)
+    digit_key = String.to_atom("digit_#{digit}")
+    Counter.Realm.inc(digit_key)
   end
 
   @doc """

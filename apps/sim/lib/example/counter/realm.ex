@@ -11,40 +11,40 @@ defmodule Counter.Realm do
     Logger.debug("Counter.Realm building counters...")
     add_to_object_list()
 
-    keys = [:counter_1, :counter_10, :counter_100]
+    keys = [:digit_1, :digit_10, :digit_100]
     Enum.each(keys, &build_counter(&1))
 
     keys
   end
 
-  def inc(counter_key) do
+  def inc(digit_key) do
     Agent.get_and_update(__MODULE__, fn state ->
-      result = inc_counter(state, counter_key)
+      result = inc_counter(state, digit_key)
       {result, state}
     end)
   end
 
-  defp inc_counter(state, counter_key) do
-    new_counter = Counter.Object.inc(counter_key)
+  defp inc_counter(state, digit_key) do
+    new_counter = Counter.Digit.inc(digit_key)
 
     case new_counter do
       n when n > 0 ->
-        %{counter_key => n}
+        %{digit_key => n}
 
-      n when n == 0 and counter_key != :counter_100 ->
-        next_key = next_counter_key(counter_key)
-        Map.merge(%{counter_key => 0}, inc_counter(state, next_key))
+      n when n == 0 and digit_key != :digit_100 ->
+        next_key = next_digit_key(digit_key)
+        Map.merge(%{digit_key => 0}, inc_counter(state, next_key))
 
-      n when n == 0 and counter_key == :counter_100 ->
+      n when n == 0 and digit_key == :digit_100 ->
         raise "counter overrun"
     end
   end
 
-  defp next_counter_key(current_key) do
+  defp next_digit_key(current_key) do
     case current_key do
-      :counter_1 -> :counter_10
-      :counter_10 -> :counter_100
-      :counter_100 -> raise "no next counter key"
+      :digit_1 -> :digit_10
+      :digit_10 -> :digit_100
+      :digit_100 -> raise "no next counter key"
     end
   end
 
@@ -63,7 +63,7 @@ defmodule Counter.Realm do
     {:ok, _pid} =
       DynamicSupervisor.start_child(
         Counter.DigitSupervisor,
-        {Counter.Object, name: name}
+        {Counter.Digit, name: name}
       )
   end
 end

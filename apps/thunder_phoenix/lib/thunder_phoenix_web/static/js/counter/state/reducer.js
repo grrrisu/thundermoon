@@ -1,9 +1,9 @@
 const initialState = {
   running: false,
   digits: {
-    counter_1: 0,
-    counter_10: 0,
-    counter_100: 0
+    digit_1: 0,
+    digit_10: 0,
+    digit_100: 0
   }
 };
 

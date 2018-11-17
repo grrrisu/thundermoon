@@ -9,6 +9,6 @@ defmodule Counter.HandlerTest do
 
   test "inc" do
     result = Counter.Handler.incoming(:inc, [10])
-    assert result == %{counter_10: 1}
+    assert result == %{digit_10: 1}
   end
 end
