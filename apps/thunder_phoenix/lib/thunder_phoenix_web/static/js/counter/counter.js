@@ -16,6 +16,10 @@ listen("change", payload => {
   store.dispatch({ type: "CHANGE", payload: payload });
 });
 
+listen("joined", payload => {
+  store.dispatch({ type: "JOINED", payload: payload });
+});
+
 listen("started", payload => {
   store.dispatch({ type: "SIM_STARTED", payload: payload });
 });

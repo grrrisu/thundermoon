@@ -4,6 +4,14 @@ defmodule Counter.Handler do
     Counter.Realm.inc(digit_key)
   end
 
+  def join(_listener) do
+    if Sim.built?() do
+      Counter.Realm.current_state()
+    else
+      %{}
+    end
+  end
+
   @doc """
   notify everyone about changes
   """

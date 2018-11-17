@@ -52,4 +52,18 @@ defmodule Counter.RealmTest do
 
     catch_exit(Counter.Realm.inc(:digit_1))
   end
+
+  test "get current state" do
+    Enum.each(1..2, fn _n -> Counter.Realm.inc(:digit_1) end)
+    Enum.each(1..3, fn _n -> Counter.Realm.inc(:digit_10) end)
+    Enum.each(1..4, fn _n -> Counter.Realm.inc(:digit_100) end)
+
+    assert Counter.Realm.current_state() == %{
+             digits: %{
+               digit_1: 2,
+               digit_10: 3,
+               digit_100: 4
+             }
+           }
+  end
 end

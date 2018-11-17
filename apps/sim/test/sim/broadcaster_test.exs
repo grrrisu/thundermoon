@@ -8,38 +8,38 @@ defmodule Sim.BroadcasterTest do
   end
 
   test "client joins a channel" do
-    assert Sim.Broadcaster.listeners(:foo) == {:error, :not_found}
-    {:ok, :foo} = Sim.Broadcaster.join(:foo)
-    {:ok, [pid]} = Sim.Broadcaster.listeners(:foo)
+    assert Sim.Broadcaster.listeners(Example.Handler) == {:error, :not_found}
+    {:ok, %{}} = Sim.Broadcaster.join(Example.Handler)
+    {:ok, [pid]} = Sim.Broadcaster.listeners(Example.Handler)
     assert self() == pid
   end
 
   test "client joins a dead channel" do
-    {:ok, :foo} = Sim.Broadcaster.join(:foo)
-    {:ok, %{foo: %{pid: pid, ref: _ref}}} = Sim.Broadcaster.channels()
+    {:ok, %{}} = Sim.Broadcaster.join(Example.Handler)
+    {:ok, %{Example.Handler => %{pid: pid, ref: _ref}}} = Sim.Broadcaster.channels()
     Agent.stop(pid)
-    assert Sim.Broadcaster.listeners(:foo) == {:error, :not_found}
+    assert Sim.Broadcaster.listeners(Example.Handler) == {:error, :not_found}
   end
 
   test "client leaves a channel" do
-    {:ok, :foo} = Sim.Broadcaster.join(:foo)
-    {:ok, [_listener]} = Sim.Broadcaster.listeners(:foo)
-    assert Sim.Broadcaster.leave(:foo) == {:ok, :foo}
-    assert Sim.Broadcaster.listeners(:foo) == {:ok, []}
+    {:ok, %{}} = Sim.Broadcaster.join(Example.Handler)
+    {:ok, [_listener]} = Sim.Broadcaster.listeners(Example.Handler)
+    assert Sim.Broadcaster.leave(Example.Handler) == {:ok, Example.Handler}
+    assert Sim.Broadcaster.listeners(Example.Handler) == {:ok, []}
   end
 
   test "client leaves a dead channel" do
-    {:ok, :foo} = Sim.Broadcaster.join(:foo)
-    {:ok, %{foo: %{pid: pid, ref: _ref}}} = Sim.Broadcaster.channels()
+    {:ok, %{}} = Sim.Broadcaster.join(Example.Handler)
+    {:ok, %{Example.Handler => %{pid: pid, ref: _ref}}} = Sim.Broadcaster.channels()
     Agent.stop(pid)
-    assert Sim.Broadcaster.leave(:foo) == {:ok, :foo}
+    assert Sim.Broadcaster.leave(Example.Handler) == {:ok, Example.Handler}
   end
 
   test "client get listeners from a dead channel" do
-    {:ok, :foo} = Sim.Broadcaster.join(:foo)
-    {:ok, %{foo: %{pid: pid, ref: _ref}}} = Sim.Broadcaster.channels()
+    {:ok, %{}} = Sim.Broadcaster.join(Example.Handler)
+    {:ok, %{Example.Handler => %{pid: pid, ref: _ref}}} = Sim.Broadcaster.channels()
     Agent.stop(pid)
-    assert Sim.Broadcaster.listeners(:foo) == {:error, :not_found}
+    assert Sim.Broadcaster.listeners(Example.Handler) == {:error, :not_found}
   end
 
   test "fireworker sends back a result" do
@@ -55,21 +55,21 @@ defmodule Sim.BroadcasterTest do
   end
 
   test "join a channel" do
-    channels = Sim.Broadcaster.join_channel(%{}, :foo, {:pid, :ref})
-    assert Map.has_key?(channels, :foo)
-    assert Sim.Broadcaster.get_listeners(channels, :foo) == {:ok, [{:pid, :ref}]}
+    channels = Sim.Broadcaster.join_channel(%{}, Example.Handler, {:pid, :ref})
+    assert Map.has_key?(channels, Example.Handler)
+    assert Sim.Broadcaster.get_listeners(channels, Example.Handler) == {:ok, [{:pid, :ref}]}
   end
 
   test "create a channel" do
-    {channels, pid} = Sim.Broadcaster.find_or_create_channel(%{}, :foo)
-    assert Map.has_key?(channels, :foo)
+    {channels, pid} = Sim.Broadcaster.find_or_create_channel(%{}, Example.Handler)
+    assert Map.has_key?(channels, Example.Handler)
     assert is_pid(pid)
   end
 
   test "find an existing channel" do
-    {:error, :not_found} = Sim.Broadcaster.find_channel(%{}, :foo)
-    {channels, pid_1} = Sim.Broadcaster.find_or_create_channel(%{}, :foo)
-    {:ok, pid_2} = Sim.Broadcaster.find_channel(channels, :foo)
+    {:error, :not_found} = Sim.Broadcaster.find_channel(%{}, Example.Handler)
+    {channels, pid_1} = Sim.Broadcaster.find_or_create_channel(%{}, Example.Handler)
+    {:ok, pid_2} = Sim.Broadcaster.find_channel(channels, Example.Handler)
     assert pid_1 == pid_2
   end
 

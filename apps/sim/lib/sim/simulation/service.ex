@@ -21,6 +21,10 @@ defmodule Sim.Simulation.Service do
     GenServer.call(__MODULE__, {:build, {realm_module, opts}})
   end
 
+  def built?() do
+    GenServer.call(__MODULE__, {:built?})
+  end
+
   def load do
   end
 
@@ -56,6 +60,10 @@ defmodule Sim.Simulation.Service do
       end
 
     {:reply, :ok, new_state}
+  end
+
+  def handle_call({:built?}, _from, %{realm_module: realm_module} = state) do
+    {:reply, realm_module != nil, state}
   end
 
   defp start_child(child_module) do

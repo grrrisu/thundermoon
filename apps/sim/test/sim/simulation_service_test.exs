@@ -7,7 +7,9 @@ defmodule Sim.Simulation.ServiceTest do
   end
 
   test "simulator build" do
-    Sim.Simulation.Service.build(Counter.Realm)
+    assert !Sim.Simulation.Service.built?()
+    Sim.Simulation.Service.build(Counter.Supervisor)
+    assert Sim.Simulation.Service.built?()
   end
 
   test "simulator start" do

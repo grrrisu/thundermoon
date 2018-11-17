@@ -17,6 +17,11 @@ module.exports = (state = initialState, action) => {
           ...action.payload.answer
         }
       };
+    case "JOINED":
+      return {
+        ...state,
+        ...action.payload.answer
+      };
     case "SIM_STARTED":
       return {
         ...state,

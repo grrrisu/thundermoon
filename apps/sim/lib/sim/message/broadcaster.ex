@@ -10,21 +10,21 @@ defmodule Sim.Broadcaster do
   end
 
   @doc """
-  join a realm to get notfied about its events
+  join a handler to get notfied about its events
   """
-  def join(realm) do
-    GenServer.call(__MODULE__, {:join, realm})
+  def join(handler) do
+    GenServer.call(__MODULE__, {:join, handler})
   end
 
   @doc """
-  leave a realm
+  leave a handler
   """
-  def leave(realm) do
-    GenServer.call(__MODULE__, {:leave, realm})
+  def leave(handler) do
+    GenServer.call(__MODULE__, {:leave, handler})
   end
 
-  def listeners(realm) do
-    GenServer.call(__MODULE__, {:listeners, realm})
+  def listeners(handler) do
+    GenServer.call(__MODULE__, {:listeners, handler})
   end
 
   def channels() do
@@ -45,18 +45,18 @@ defmodule Sim.Broadcaster do
     {:ok, %{}}
   end
 
-  def handle_call({:join, realm}, {pid, _ref}, state) do
-    new_state = join_channel(state, realm, pid)
-    {:reply, {:ok, realm}, new_state}
+  def handle_call({:join, handler}, {pid, _ref}, state) do
+    new_state = join_channel(state, handler, pid)
+    {:reply, {:ok, handler.join(pid)}, new_state}
   end
 
-  def handle_call({:leave, realm}, {pid, _ref}, state) do
-    new_state = leave_channel(state, realm, pid)
-    {:reply, {:ok, realm}, new_state}
+  def handle_call({:leave, handler}, {pid, _ref}, state) do
+    new_state = leave_channel(state, handler, pid)
+    {:reply, {:ok, handler}, new_state}
   end
 
-  def handle_call({:listeners, realm}, _from, state) do
-    {:reply, get_listeners(state, realm), state}
+  def handle_call({:listeners, handler}, _from, state) do
+    {:reply, get_listeners(state, handler), state}
   end
 
   def handle_call({:channels}, _from, state) do

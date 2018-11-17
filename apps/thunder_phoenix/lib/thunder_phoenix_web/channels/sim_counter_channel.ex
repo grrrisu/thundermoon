@@ -37,7 +37,8 @@ defmodule ThunderPhoenixWeb.SimCounterChannel do
 
   def join_realm(socket) do
     Task.start_link(fn ->
-      Counter.join()
+      {:ok, initial_state} = Counter.join()
+      push(socket, "joined", %{"answer" => initial_state})
       listen(socket)
     end)
   end

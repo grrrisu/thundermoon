@@ -11,4 +11,9 @@ defmodule Counter.HandlerTest do
     result = Counter.Handler.incoming(:inc, [10])
     assert result == %{digit_10: 1}
   end
+
+  test "join" do
+    result = Counter.Handler.join(:pid)
+    assert result == %{digits: %{digit_1: 0, digit_10: 0, digit_100: 0}}
+  end
 end
