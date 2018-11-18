@@ -35,4 +35,8 @@ defmodule Sim do
   def start(opts \\ {}) do
     Sim.Simulation.Service.start_sim(opts)
   end
+
+  def stop() do
+    Sim.Simulation.Service.stop_sim()
+  end
 end

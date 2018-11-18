@@ -8,7 +8,7 @@ defmodule Sim.FireWorker do
   end
 
   def run(_args) do
-    Logger.debug("starting fire_worker...")
+    # Logger.debug("starting fire_worker...")
     process()
   end
 

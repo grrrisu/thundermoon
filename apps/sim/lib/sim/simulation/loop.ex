@@ -1,5 +1,5 @@
 defmodule Sim.Simulation.Loop do
-  use Task, restart: :transient
+  use Task
 
   require Logger
 

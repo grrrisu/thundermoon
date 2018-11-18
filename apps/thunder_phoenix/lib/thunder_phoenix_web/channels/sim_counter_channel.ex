@@ -18,13 +18,13 @@ defmodule ThunderPhoenixWeb.SimCounterChannel do
   end
 
   def handle_in("start", message, socket) do
-    # FIXME just a shortcut to test websocket and redux
+    Sim.start()
     broadcast!(socket, "started", %{})
     {:noreply, socket}
   end
 
   def handle_in("stop", message, socket) do
-    # FIXME just a shortcut to test websocket and redux
+    Sim.stop()
     broadcast!(socket, "stopped", %{})
     {:noreply, socket}
   end

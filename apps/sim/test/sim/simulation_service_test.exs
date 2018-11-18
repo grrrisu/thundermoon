@@ -12,10 +12,11 @@ defmodule Sim.Simulation.ServiceTest do
     assert Sim.Simulation.Service.built?()
   end
 
-  test "simulator start" do
+  test "simulator start and stop" do
+    assert !Sim.Simulation.Service.running?()
     Sim.Simulation.Service.start_sim()
-  end
-
-  test "simulator stop" do
+    assert Sim.Simulation.Service.running?()
+    Sim.Simulation.Service.stop_sim()
+    assert !Sim.Simulation.Service.running?()
   end
 end

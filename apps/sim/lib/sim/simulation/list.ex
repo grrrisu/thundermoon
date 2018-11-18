@@ -80,11 +80,14 @@ defmodule Sim.Simulation.List do
   end
 
   def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
+    IO.inspect(ref)
+    IO.inspect(state)
     new_queue = handle_remove(state, &(ref == &1.ref))
     {:noreply, new_queue}
   end
 
-  def handle_info(_msg, state) do
+  def handle_info(msg, state) do
+    IO.inspect(msg)
     {:noreply, state}
   end
 
