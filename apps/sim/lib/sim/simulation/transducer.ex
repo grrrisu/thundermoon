@@ -1,4 +1,4 @@
 defmodule Sim.Simulation.Transducer do
-  @enforce_keys [:handler, :action, :function, :object]
-  defstruct [:handler, :action, :function, :object, :last_touched]
+  @enforce_keys [:handler, :action, :function, :object, :ref]
+  defstruct [:handler, :action, :function, :object, :ref, :last_touched]
 end

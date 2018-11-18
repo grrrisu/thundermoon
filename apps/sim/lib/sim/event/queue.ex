@@ -55,10 +55,11 @@ defmodule Sim.Event.Queue do
   end
 
   def handle_info({:DOWN, ref, :process, _pid, :normal}, state) do
+    remove_fire_worker(ref, state)
     {:noreply, remove_fire_worker(ref, state)}
   end
 
-  def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
+  def handle_info({:DOWN, ref, :process, _pid, _error}, state) do
     # TODO broadcast {:error, reason}
     {:noreply, remove_fire_worker(ref, state)}
   end

@@ -14,7 +14,7 @@ defmodule Counter.RealmTest do
   end
 
   test "add tick to object list" do
-    assert !Sim.Simulation.List.is_empty()
+    assert !Sim.Simulation.List.empty?()
   end
 
   test "inc digit_1" do

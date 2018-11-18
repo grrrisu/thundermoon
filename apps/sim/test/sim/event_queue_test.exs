@@ -13,4 +13,18 @@ defmodule Sim.Event.QueueTest do
     Sim.Event.Queue.add({Example.Handler, :upcase, fn -> String.upcase("some calculation") end})
     assert Sim.Event.List.empty?()
   end
+
+  test "remove fireworker when finished" do
+    assert :sys.get_state(Sim.Event.Queue).fire_worker == %{pid: nil, ref: nil}
+    Sim.Event.Queue.add({Example.Handler, :upcase, fn -> :done end})
+    Process.sleep(5)
+    assert :sys.get_state(Sim.Event.Queue).fire_worker == %{pid: nil, ref: nil}
+  end
+
+  test "remove fireworker when crashed" do
+    assert :sys.get_state(Sim.Event.Queue).fire_worker == %{pid: nil, ref: nil}
+    Sim.Event.Queue.add({Example.Handler, :upcase, fn -> spawn_link(fn -> raise "error" end) end})
+    Process.sleep(5)
+    assert :sys.get_state(Sim.Event.Queue).fire_worker == %{pid: nil, ref: nil}
+  end
 end

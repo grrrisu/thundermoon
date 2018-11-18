@@ -1,62 +1,121 @@
 defmodule Sim.Simulation.List do
-  use Agent
+  use GenServer
 
   def start_link(opts) do
-    Agent.start_link(fn -> :queue.new() end, opts)
+    GenServer.start_link(__MODULE__, :ok, opts)
   end
 
   def clear() do
-    Agent.update(__MODULE__, fn _state -> :queue.new() end)
+    GenServer.call(__MODULE__, {:clear})
   end
 
   def size() do
-    Agent.get(__MODULE__, &:queue.len(&1))
+    GenServer.call(__MODULE__, {:size})
   end
 
-  def is_empty() do
-    Agent.get(__MODULE__, &:queue.is_empty(&1))
+  def empty? do
+    GenServer.call(__MODULE__, {:empty?})
   end
 
-  def to_list() do
-    Agent.get(__MODULE__, &:queue.to_list(&1))
+  def to_list do
+    GenServer.call(__MODULE__, {:to_list})
   end
 
-  def objects() do
-    Agent.get(__MODULE__, fn queue ->
-      queue |> :queue.to_list() |> Enum.map(& &1.object)
-    end)
+  def objects do
+    GenServer.call(__MODULE__, {:objects})
   end
 
-  def add(simulation) do
-    Agent.update(__MODULE__, &:queue.in(decorate(simulation), &1))
+  def add(transducer) do
+    GenServer.call(__MODULE__, {:add, transducer})
   end
 
   def next() do
-    Agent.get_and_update(__MODULE__, fn queue ->
-      case :queue.out(queue) do
-        {{:value, item}, new_queue} ->
-          {item, :queue.in(item, new_queue)}
-
-        {:empty, queue} ->
-          {:empty, queue}
-      end
-    end)
+    GenServer.call(__MODULE__, {:next})
   end
 
   def remove(object) do
-    Agent.update(__MODULE__, fn queue ->
-      queue
-      |> :queue.to_list()
-      |> Enum.reject(&(object == &1.object))
-      |> :queue.from_list()
-    end)
+    GenServer.call(__MODULE__, {:remove, object})
+  end
+
+  # --- server API ---
+
+  def init(:ok) do
+    {:ok, :queue.new()}
+  end
+
+  def handle_call({:clear}, _from, _state) do
+    {:reply, :ok, :queue.new()}
+  end
+
+  def handle_call({:size}, _from, state) do
+    {:reply, :queue.len(state), state}
+  end
+
+  def handle_call({:empty?}, _from, state) do
+    {:reply, :queue.is_empty(state), state}
+  end
+
+  def handle_call({:to_list}, _from, state) do
+    {:reply, :queue.to_list(state), state}
+  end
+
+  def handle_call({:objects}, _from, state) do
+    objects = state |> :queue.to_list() |> Enum.map(& &1.object)
+    {:reply, objects, state}
+  end
+
+  def handle_call({:add, transducer}, _from, state) do
+    new_state = :queue.in(decorate(transducer), state)
+    {:reply, :ok, new_state}
+  end
+
+  def handle_call({:next}, _from, state) do
+    {item, queue} = handle_next(state)
+    {:reply, item, queue}
+  end
+
+  def handle_call({:remove, object}, _from, state) do
+    new_queue = handle_remove(state, &(object == &1.object))
+    {:reply, :ok, new_queue}
+  end
+
+  def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
+    new_queue = handle_remove(state, &(ref == &1.ref))
+    {:noreply, new_queue}
+  end
+
+  def handle_info(_msg, state) do
+    {:noreply, state}
+  end
+
+  defp handle_next(queue) do
+    case :queue.out(queue) do
+      {{:value, item}, new_queue} ->
+        {item, :queue.in(item, new_queue)}
+
+      {:empty, queue} ->
+        {:empty, queue}
+    end
+  end
+
+  defp handle_remove(queue, function) do
+    queue
+    |> :queue.to_list()
+    |> Enum.reject(function)
+    |> :queue.from_list()
   end
 
   defp decorate({handler, action, object, function}) do
+    ref =
+      if is_pid(object) do
+        Process.monitor(object)
+      end
+
     %Sim.Simulation.Transducer{
       handler: handler,
       action: action,
       object: object,
+      ref: ref,
       function: function
     }
   end

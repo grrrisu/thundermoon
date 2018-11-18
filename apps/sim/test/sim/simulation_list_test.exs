@@ -53,4 +53,21 @@ defmodule Sim.Simulation.ListTest do
   test "get next object on a empty list" do
     assert Sim.Simulation.List.next() == :empty
   end
+
+  test "remove finished object", %{function: f} do
+    {:ok, pid} = Agent.start(fn -> 0 end)
+    add_to_object_list(pid, f)
+    assert Sim.Simulation.List.objects() == [pid]
+    Agent.stop(pid)
+    assert Sim.Simulation.List.objects() == []
+  end
+
+  test "remove crashed object", %{function: f} do
+    {:ok, pid} = Agent.start(fn -> 0 end)
+    add_to_object_list(pid, f)
+    assert Sim.Simulation.List.objects() == [pid]
+    Process.exit(pid, :error)
+    Process.sleep(5)
+    assert Sim.Simulation.List.objects() == []
+  end
 end

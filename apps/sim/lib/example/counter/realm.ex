@@ -24,7 +24,7 @@ defmodule Counter.Realm do
     add_to_object_list()
 
     keys = [:digit_1, :digit_10, :digit_100]
-    Enum.each(keys, &build_counter(&1))
+    Enum.each(keys, &build_digit(&1))
 
     keys
   end
@@ -71,7 +71,7 @@ defmodule Counter.Realm do
     })
   end
 
-  defp build_counter(name) do
+  defp build_digit(name) do
     {:ok, _pid} =
       DynamicSupervisor.start_child(
         Counter.DigitSupervisor,
