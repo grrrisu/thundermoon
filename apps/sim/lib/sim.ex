@@ -32,6 +32,10 @@ defmodule Sim do
     Sim.Simulation.Service.built?()
   end
 
+  def running? do
+    Sim.Simulation.Service.running?()
+  end
+
   def start(opts \\ {}) do
     Sim.Simulation.Service.start_sim(opts)
   end

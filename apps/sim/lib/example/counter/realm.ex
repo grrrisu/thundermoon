@@ -7,18 +7,6 @@ defmodule Counter.Realm do
     Agent.start_link(fn -> Counter.Realm.build() end, opts)
   end
 
-  def current_state() do
-    Agent.get(__MODULE__, fn _state ->
-      %{
-        digits: %{
-          digit_1: Counter.Digit.get(:digit_1),
-          digit_10: Counter.Digit.get(:digit_10),
-          digit_100: Counter.Digit.get(:digit_100)
-        }
-      }
-    end)
-  end
-
   def build do
     Logger.debug("Counter.Realm building counters...")
     add_to_object_list()
@@ -27,6 +15,19 @@ defmodule Counter.Realm do
     Enum.each(keys, &build_digit(&1))
 
     keys
+  end
+
+  def current_state() do
+    Agent.get(__MODULE__, fn _state ->
+      %{
+        running: Sim.running?(),
+        digits: %{
+          digit_1: Counter.Digit.get(:digit_1),
+          digit_10: Counter.Digit.get(:digit_10),
+          digit_100: Counter.Digit.get(:digit_100)
+        }
+      }
+    end)
   end
 
   def inc(digit_key) do

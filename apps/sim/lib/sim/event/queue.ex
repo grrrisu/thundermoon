@@ -37,21 +37,19 @@ defmodule Sim.Event.Queue do
     {:noreply, state}
   end
 
-  def ensure_fire_worker_is_running(state) do
-    case state do
-      %{fire_worker: %{pid: nil}} ->
-        {:ok, pid} =
-          DynamicSupervisor.start_child(
-            Sim.FireWorkerSupervisor,
-            {Sim.FireWorker, name: Sim.FireWorker}
-          )
+  def ensure_fire_worker_is_running(%{fire_worker: %{pid: nil}} = state) do
+    {:ok, pid} =
+      DynamicSupervisor.start_child(
+        Sim.FireWorkerSupervisor,
+        {Sim.FireWorker, name: Sim.FireWorker}
+      )
 
-        ref = Process.monitor(pid)
-        %{state | fire_worker: %{pid: pid, ref: ref}}
+    ref = Process.monitor(pid)
+    %{state | fire_worker: %{pid: pid, ref: ref}}
+  end
 
-      %{fire_worker: %{pid: _pid}} ->
-        state
-    end
+  def ensure_fire_worker_is_running(%{fire_worker: %{pid: _pid}} = state) do
+    state
   end
 
   def handle_info({:DOWN, ref, :process, _pid, :normal}, state) do

@@ -80,14 +80,11 @@ defmodule Sim.Simulation.List do
   end
 
   def handle_info({:DOWN, ref, :process, _pid, _reason}, state) do
-    IO.inspect(ref)
-    IO.inspect(state)
     new_queue = handle_remove(state, &(ref == &1.ref))
     {:noreply, new_queue}
   end
 
-  def handle_info(msg, state) do
-    IO.inspect(msg)
+  def handle_info(_msg, state) do
     {:noreply, state}
   end
 
@@ -109,17 +106,24 @@ defmodule Sim.Simulation.List do
   end
 
   defp decorate({handler, action, object, function}) do
-    ref =
-      if is_pid(object) do
-        Process.monitor(object)
-      end
-
     %Sim.Simulation.Transducer{
       handler: handler,
       action: action,
       object: object,
-      ref: ref,
+      ref: object_reference(object),
       function: function
     }
+  end
+
+  defp object_reference(object) when is_atom(object) do
+    Process.whereis(object) |> Process.monitor()
+  end
+
+  defp object_reference(object) when is_pid(object) do
+    Process.monitor(object)
+  end
+
+  defp object_reference(_object) do
+    nil
   end
 end
