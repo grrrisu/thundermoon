@@ -59,6 +59,7 @@ defmodule Counter.RealmTest do
     Enum.each(1..4, fn _n -> Counter.Realm.inc(:digit_100) end)
 
     assert Counter.Realm.current_state() == %{
+             running: false,
              digits: %{
                digit_1: 2,
                digit_10: 3,

@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
 const digitComponent = ({ digitValue }) => {
   return (
     <div className="digit">
-      <div className="badge badge-dark">{digitValue}</div>
+      <div className="badge badge-dark digit-badge">{digitValue}</div>
     </div>
   );
 };

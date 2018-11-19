@@ -14,6 +14,6 @@ defmodule Counter.HandlerTest do
 
   test "join" do
     result = Counter.Handler.join(:pid)
-    assert result == %{digits: %{digit_1: 0, digit_10: 0, digit_100: 0}}
+    assert result == %{running: false, digits: %{digit_1: 0, digit_10: 0, digit_100: 0}}
   end
 end
