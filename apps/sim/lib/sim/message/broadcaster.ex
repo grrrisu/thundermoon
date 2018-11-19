@@ -73,6 +73,17 @@ defmodule Sim.Broadcaster do
     {:noreply, delete_channels(state)}
   end
 
+  def handle_info({:DOWN, ref, :process, _pid, :normal}, state) do
+    case Enum.find(state, &(elem(&1, 1).ref == ref)) do
+      nil -> {:noreply, state}
+      {key, _listener} -> {:noreply, Map.delete(state, key)}
+    end
+  end
+
+  def handle_info(_msg, state) do
+    {:noreply, state}
+  end
+
   # --- server internal ---
 
   def join_channel(channels, key, listener) do
@@ -127,14 +138,12 @@ defmodule Sim.Broadcaster do
     %{}
   end
 
-  def broadcast(state, handler, action, result) do
-    case result do
-      {:ok, res} ->
-        handler.outgoing(state, action, {:ok, res})
+  def broadcast(state, handler, action, {:ok, result}) do
+    handler.outgoing(state, action, {:ok, result})
+  end
 
-      {:error, error} ->
-        Sim.Monitor.track(error)
-    end
+  def broadcast(_state, _handler, _action, {:error, error}) do
+    Sim.Monitor.track(error)
   end
 
   def send_message(listeners, message) do
@@ -144,16 +153,5 @@ defmodule Sim.Broadcaster do
 
   defp send_to_one(listener, message) do
     Task.start_link(fn -> send(listener, message) end)
-  end
-
-  def handle_info({:DOWN, ref, :process, _pid, :normal}, state) do
-    case Enum.find(state, &(elem(&1, 1).ref == ref)) do
-      nil -> {:noreply, state}
-      {key, _listener} -> {:noreply, Map.delete(state, key)}
-    end
-  end
-
-  def handle_info(_msg, state) do
-    {:noreply, state}
   end
 end
