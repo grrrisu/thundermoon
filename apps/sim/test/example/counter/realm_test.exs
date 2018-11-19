@@ -53,6 +53,26 @@ defmodule Counter.RealmTest do
     catch_exit(Counter.Realm.inc(:digit_1))
   end
 
+  test "dec 3 should become 2" do
+    Enum.each(1..3, fn _n -> Counter.Realm.inc(:digit_1) end)
+    assert Counter.Digit.get(:digit_1) == 3
+    assert Counter.Realm.inc(:digit_1, -1) == %{digit_1: 2}
+    assert Counter.Digit.get(:digit_1) == 2
+  end
+
+  test "dec 10 should become 9" do
+    Enum.each(1..10, fn _n -> Counter.Realm.inc(:digit_1) end)
+    assert Counter.Digit.get(:digit_10) == 1
+    assert Counter.Digit.get(:digit_1) == 0
+    assert Counter.Realm.inc(:digit_1, -1) == %{digit_10: 0, digit_1: 9}
+    assert Counter.Digit.get(:digit_10) == 0
+    assert Counter.Digit.get(:digit_1) == 9
+  end
+
+  test "raise if below 0 is reached" do
+    catch_exit(Counter.Realm.inc(:digit_1, -1))
+  end
+
   test "get current state" do
     Enum.each(1..2, fn _n -> Counter.Realm.inc(:digit_1) end)
     Enum.each(1..3, fn _n -> Counter.Realm.inc(:digit_10) end)

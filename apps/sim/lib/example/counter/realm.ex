@@ -53,7 +53,7 @@ defmodule Counter.Realm do
     end)
   end
 
-  def inc(digit, step) do
+  def inc(digit, step \\ 1) do
     # run inc inside realm agent, so if it crashes it will reset the digits
     Agent.get(__MODULE__, fn _state ->
       Counter.Simulation.inc(digit, step)

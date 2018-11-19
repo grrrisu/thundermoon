@@ -8,8 +8,14 @@ defmodule Counter.HandlerTest do
   end
 
   test "inc" do
-    result = Counter.Handler.incoming(:inc, [10])
+    result = Counter.Handler.incoming(:inc, [:digit_10, 1])
     assert result == %{digit_10: 1}
+  end
+
+  test "dec" do
+    Enum.each(1..3, fn _n -> Counter.Realm.inc(:digit_10) end)
+    result = Counter.Handler.incoming(:inc, [:digit_10, -1])
+    assert result == %{digit_10: 2}
   end
 
   test "join" do
