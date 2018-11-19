@@ -24,4 +24,15 @@ defmodule Counter.Digit do
         {new_counter, new_counter}
     end)
   end
+
+  def dec(digit) do
+    Agent.get_and_update(digit, fn
+      counter when counter == 0 ->
+        {9, 9}
+
+      counter ->
+        new_counter = counter - 1
+        {new_counter, new_counter}
+    end)
+  end
 end

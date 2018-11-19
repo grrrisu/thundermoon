@@ -10,20 +10,22 @@ defmodule ThunderPhoenixWeb.SimCounterChannel do
 
   def handle_in("inc", %{"digit" => digit, "step" => step}, socket) do
     if Enum.member?(["1", "10", "100"], digit) do
-      msg = {Counter.Handler, :inc, [digit]}
+      digit_key = String.to_atom("digit_#{digit}")
+      step_int = String.to_integer(step)
+      msg = {Counter.Handler, :inc, [digit_key, step_int]}
       Task.start_link(fn -> Sim.process(msg) end)
     end
 
     {:noreply, socket}
   end
 
-  def handle_in("start", message, socket) do
+  def handle_in("start", _message, socket) do
     Sim.start()
     broadcast!(socket, "started", %{})
     {:noreply, socket}
   end
 
-  def handle_in("stop", message, socket) do
+  def handle_in("stop", _message, socket) do
     Sim.stop()
     broadcast!(socket, "stopped", %{})
     {:noreply, socket}
