@@ -1,4 +1,4 @@
-import socket from "./user_socket";
+import socket from "../user_socket";
 
 let channel = socket.channel("sim:basic", {});
 
@@ -12,15 +12,15 @@ channel
   });
 
 // reverse text
-let chatInput = document.querySelector("#reverse-input");
+let reverseInput = document.querySelector("#reverse-input");
 let reversedText = document.getElementById("reversed-text");
 
-chatInput.addEventListener("keypress", event => {
+reverseInput.addEventListener("keypress", event => {
   if (event.keyCode === 13) {
     event.preventDefault();
     reversedText.innerText = "... waiting ...";
-    channel.push("reverse", { text: chatInput.value });
-    chatInput.value = "";
+    channel.push("reverse", { text: reverseInput.value });
+    reverseInput.value = "";
   }
 });
 

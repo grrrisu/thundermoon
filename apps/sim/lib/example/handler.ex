@@ -9,6 +9,10 @@ defmodule Example.Handler do
     raise "oh snap, function crashed!!!"
   end
 
+  def join(_listener) do
+    %{}
+  end
+
   @doc """
   notify everyone about any results
   """

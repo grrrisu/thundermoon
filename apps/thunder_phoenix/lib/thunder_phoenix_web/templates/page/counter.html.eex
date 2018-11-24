@@ -1,0 +1,9 @@
+<h2>Counter</h2>
+<p class="lead">Counter example. Press start to inc by 1 every sec or use the arrows to inc and dec manually.</p>
+<div class="jumbotron">
+  <div id="counter"></div>
+</div>
+
+<p>
+  <a href="<%= page_path(@conn, :index) %>" class="btn btn-light float-left" role="button">Prev: Basic</a>
+</p>

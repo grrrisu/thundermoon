@@ -1,8 +1,8 @@
-defmodule Sim.Session do
-  use Agent
+defmodule Sim.Channel do
+  use Agent, restart: :temporary
 
   @doc """
-  start Broadcaster with a list of listeners
+  start a Channel with a list of listeners
   """
   def start_link(opts) do
     Agent.start_link(fn -> [] end, opts)

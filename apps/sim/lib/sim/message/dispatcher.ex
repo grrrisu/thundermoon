@@ -23,13 +23,13 @@ defmodule Sim.Dispatcher do
   end
 
   def handle_call({:process, {handler, action, args}}, _from, state) do
-    Logger.info("Sim.Dispatcher: incoming message #{handler}.#{action}(#{args})")
+    Logger.info("Sim.Dispatcher: incoming message #{handler}.#{action})")
     Task.start(fn -> enqueue(handler, action, args) end)
     {:reply, :ok, state}
   end
 
   def enqueue(handler, action, args) do
-    Sim.EventQueue.add(
+    Sim.Event.Queue.add(
       {handler, action,
        fn ->
          handler.incoming(action, args)

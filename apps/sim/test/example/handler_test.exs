@@ -2,8 +2,8 @@ defmodule Example.HandlerTest do
   use ExUnit.Case, async: true
 
   test "reverse text" do
-    res = Example.Handler.incoming(:reverse, ["hello world"])
-    assert res, "dlrow olleh"
+    result = Example.Handler.incoming(:reverse, ["hello world"])
+    assert result, "dlrow olleh"
   end
 
   test "crash" do

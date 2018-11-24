@@ -34,4 +34,24 @@ defmodule Sim do
   def process(msg) do
     Sim.Dispatcher.process(msg)
   end
+
+  def build(realm_module, opts \\ {}) do
+    Sim.Simulation.Service.build(realm_module, opts)
+  end
+
+  def built? do
+    Sim.Simulation.Service.built?()
+  end
+
+  def running? do
+    Sim.Simulation.Service.running?()
+  end
+
+  def start(opts \\ {}) do
+    Sim.Simulation.Service.start_sim(opts)
+  end
+
+  def stop() do
+    Sim.Simulation.Service.stop_sim()
+  end
 end
