@@ -21,15 +21,16 @@ defmodule ThunderPhoenixWeb do
     quote do
       use Phoenix.Controller, namespace: ThunderPhoenixWeb
       import Plug.Conn
-      import ThunderPhoenixWeb.Router.Helpers
+      alias ThunderPhoenixWeb.Router.Helpers, as: Routes
       import ThunderPhoenixWeb.Gettext
     end
   end
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/thunder_phoenix_web/templates",
-                        namespace: ThunderPhoenixWeb
+      use Phoenix.View,
+        root: "lib/thunder_phoenix_web/templates",
+        namespace: ThunderPhoenixWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
@@ -37,7 +38,7 @@ defmodule ThunderPhoenixWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import ThunderPhoenixWeb.Router.Helpers
+      alias ThunderPhoenixWeb.Router.Helpers, as: Routes
       import ThunderPhoenixWeb.ErrorHelpers
       import ThunderPhoenixWeb.Gettext
     end

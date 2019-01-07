@@ -19,20 +19,20 @@ defmodule ThunderPhoenixWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import ThunderPhoenixWeb.Router.Helpers
+      alias ThunderPhoenixWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
       @endpoint ThunderPhoenixWeb.Endpoint
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(ThunderPhoenix.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(ThunderPhoenix.Repo, {:shared, self()})
     end
+
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
-
 end
