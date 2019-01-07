@@ -1,7 +1,7 @@
 defmodule ThunderPhoenixWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :thunder_phoenix
 
-  socket("/socket", ThunderPhoenixWeb.UserSocket)
+  socket("/socket", ThunderPhoenixWeb.UserSocket, websocket: true)
 
   # Serve at "/" the static files from "priv/static" directory.
   #
