@@ -5,7 +5,7 @@ defmodule ThunderPhoenixWeb.SimBasicChannelTest do
 
   setup do
     {:ok, _, socket} =
-      socket("user_id", %{some: :assign})
+      socket(ThunderPhoenixWeb.UserSocket, "user_id", %{some: :assign})
       |> subscribe_and_join(SimBasicChannel, "sim:basic")
 
     {:ok, socket: socket}
