@@ -1,5 +1,5 @@
 import "phoenix_html";
-import "./phoenix";
+import "phoenix";
 
 if (document.getElementById("chat-input")) {
   import("./chat/chat_socket").then(function(page) {
