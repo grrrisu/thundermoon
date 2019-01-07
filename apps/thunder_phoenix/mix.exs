@@ -46,6 +46,7 @@ defmodule ThunderPhoenix.Mixfile do
       {:gettext, "~> 0.11"},
       {:plug_cowboy, "~> 2.0"},
       {:plug, "~> 1.7"},
+      {:jason, "~> 1.0"},
       {:sim, in_umbrella: true}
     ]
   end
