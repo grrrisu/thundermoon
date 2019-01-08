@@ -40,5 +40,5 @@
 </p>
 
 <p>
-  <a href="<%= page_path(@conn, :counter) %>" class="btn btn-light float-right" role="button">Next: Counter</a>
+  <a href="<%= Routes.page_path(@conn, :counter) %>" class="btn btn-light float-right" role="button">Next: Counter</a>
 </p>

@@ -5,5 +5,5 @@
 </div>
 
 <p>
-  <a href="<%= page_path(@conn, :index) %>" class="btn btn-light float-left" role="button">Prev: Basic</a>
+  <a href="<%= Routes.page_path(@conn, :index) %>" class="btn btn-light float-left" role="button">Prev: Basic</a>
 </p>

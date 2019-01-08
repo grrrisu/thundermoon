@@ -1,4 +1,4 @@
-@import "../../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 @import "./counter";
 
@@ -13,6 +13,6 @@ body {
   height: 71px;
   display: inline-block;
   margin-bottom: 1em;
-  background-image: url("../images/phoenix.png");
+  background-image: url("../static/images/phoenix.png");
   background-size: 519px 71px;
 }
