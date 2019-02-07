@@ -27,6 +27,7 @@ defmodule Thundermoon.MixProject do
   # Run "mix help deps" for examples and options.
   defp deps do
     [
+      {:distillery, "~> 2.0", runtime: false},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false}
     ]
   end

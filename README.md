@@ -13,3 +13,32 @@ _image: Thunderbird Moon by Joe Wilson-Sxwaset_
 
 - [ThunderPhoenix](apps/thunder_phoenix) webapp talking to clients via WebSockets
 - [SimContainer](apps/sim) doing the actual simulations
+
+## Deploy
+
+`mix release`
+
+```
+To start the release you have built, you can use one of the following tasks:
+
+    # start a shell, like 'iex -S mix'
+    > _build/dev/rel/thundermoon/bin/thundermoon console
+
+    # start in the foreground, like 'mix run --no-halt'
+    > _build/dev/rel/thundermoon/bin/thundermoon foreground
+
+    # start in the background, must be stopped with the 'stop' command
+    > _build/dev/rel/thundermoon/bin/thundermoon start
+
+If you started a release elsewhere, and wish to connect to it:
+
+    # connects a local shell to the running node
+    > _build/dev/rel/thundermoon/bin/thundermoon remote_console
+
+    # connects directly to the running node's console
+    > _build/dev/rel/thundermoon/bin/thundermoon attach
+
+For a complete listing of commands and their use:
+
+    > _build/dev/rel/thundermoon/bin/thundermoon help
+```
