@@ -15,6 +15,9 @@ RUN mix do deps.get, deps.compile
 WORKDIR /thundermoon/apps/thunder_phoenix/assets
 RUN npm install && npm run deploy
 
+# WORKDIR /thundermoon/apps/thunder_phoenix
+# RUN mix ecto.create && mix ecto.migrate
+
 WORKDIR /thundermoon
 COPY rel rel
 RUN mix release --env=prod --verbose
@@ -40,8 +43,11 @@ COPY --from=builder /thundermoon/_build/prod/rel/thundermoon/releases/0.1.0/thun
 
 RUN tar zxf thundermoon.tar.gz && rm thundermoon.tar.gz
 
-RUN chown -R root ./releases
+#RUN chown -R root ./releases
 
-USER root
+#USER root
+
+# WORKDIR /thundermoon/apps/thunder_phoenix ???
+# RUN mix ecto.migrate ???
 
 CMD ["/thundermoon/bin/thundermoon", "foreground"]

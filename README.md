@@ -16,16 +16,21 @@ _image: Thunderbird Moon by Joe Wilson-Sxwaset_
 
 ## Deploy
 
-`assets/npm install`
-`assets/npm run deploy`
+`apps/thunder_phoenix/assets/npm install`
+
+`apps/thunder_phoenix/assets/npm run deploy`
+
 `MIX_ENV=prod mix release`
 
 run it in foreground
+
 `MIX_ENV=prod PORT=4000 _build/dev/rel/thundermoon/bin/thundermoon foreground`
 
 ### Docker
 
 `docker build -t thundermoon:0.1.0 .`
+
+`docker build -t thundermoon:build --target builder`
 
 ```
 docker run --rm -ti \
