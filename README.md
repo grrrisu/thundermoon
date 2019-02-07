@@ -16,7 +16,25 @@ _image: Thunderbird Moon by Joe Wilson-Sxwaset_
 
 ## Deploy
 
-`mix release`
+`assets/npm install`
+`assets/npm run deploy`
+`MIX_ENV=prod mix release`
+
+run it in foreground
+`MIX_ENV=prod PORT=4000 _build/dev/rel/thundermoon/bin/thundermoon foreground`
+
+### Docker
+
+`docker build -t thundermoon:0.1.0 .`
+
+```
+docker run --rm -ti \
+             -p 4000:4000 \
+             -e COOKIE=a_cookie \
+             thundermoon:0.1.0
+```
+
+### run built app
 
 ```
 To start the release you have built, you can use one of the following tasks:
