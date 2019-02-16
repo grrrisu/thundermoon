@@ -39,6 +39,16 @@ docker run --rm -ti \
              thundermoon:0.1.0
 ```
 
+#### Docker Compose
+
+set `hostname: db` in `config/prod.secret.exs` ecto configuration
+
+`docker-compose build`
+
+`docker-compose up`
+
+`docker-compose down`
+
 ### run built app
 
 ```
