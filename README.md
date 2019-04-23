@@ -13,3 +13,9 @@ _image: Thunderbird Moon by Joe Wilson-Sxwaset_
 
 - [ThunderPhoenix](apps/thunder_phoenix) webapp talking to clients via WebSockets
 - [SimContainer](apps/sim) doing the actual simulations
+
+## Docker
+
+`docker build -t=thundermoon .`
+
+`docker run thundermoon`
